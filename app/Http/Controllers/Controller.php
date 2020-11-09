@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Repositories\Repository;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Validation\ValidationException;
+
+class Controller extends BaseController
+{
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected array $storeRules = [];
+    protected array $updateRules = [];
+    protected array $messages = [];
+    protected ?Repository $repository;
+    protected string $name = "recurso";
+
+    public function __construct(Repository $repository = null)
+    {
+        $this->repository = $repository;
+        $this->middleware('auth');
+    }
+
+    /**
+     * @param $message
+     * @param int $code
+     * @param array $data
+     * @return JsonResponse
+     */
+    public function jsonResponse($message, $code = 200, $data = []){
+        $data['message'] = $message;
+        return response()->json($data,$code)->setStatusCode($code,$message);
+    }
+
+    /**
+     * @param $message
+     * @param int $code
+     * @param array $data
+     * @return JsonResponse|object
+     */
+    public function errorResponse($message, $code = 500, $data = []){
+        $data['message'] = $message;
+        $data['error'] = true;
+        return response()->json($data,$code)->setStatusCode($code,$message);
+    }
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function store(Request $request){
+        $this->validate($request,$this->storeRules,$this->messages);
+        $data = $request->all();
+        $resource = $this->repository->store($data);
+        return $this->jsonResponse('Recurso creado con éxtio',201,[$this->name=>$resource]);
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function show($id){
+        $resource = $this->repository->show($id);
+        return $this->jsonResponse('Encontrado',200,[$this->name=>$resource]);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function update($id, Request $request)
+    {
+        $this->repository->update($id,$request->all());
+        return $this->jsonResponse('Registro Editado',200,[$this->name=>$request->all()]);
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function destroy($id){
+        $this->repository->destroy($id);
+        return $this->jsonResponse('Registro Eliminado',206);
+
+    }
+}

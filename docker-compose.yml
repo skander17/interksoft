@@ -1,0 +1,36 @@
+version: '3.2'
+
+services:
+  trapeca:
+    build: .
+    image: trapeca
+    ports:
+      - '8020:80'
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - dbtrapeca
+    restart: always
+    container_name: trapeca
+
+  dbtrapeca:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - '3307:3306'
+    restart: always
+    container_name: dbtrapeca
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: dbtrapeca
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - '8083:80'
+    depends_on:
+      - dbtrapeca
+    restart: always
+    container_name: dbtrapeca_phpmyadmin
