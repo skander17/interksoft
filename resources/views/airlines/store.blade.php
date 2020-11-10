@@ -42,7 +42,7 @@
         const sendCreate = (data) => {
             let message = 'Error al guardar la aerolinea';
             window.axios.post(
-                `api/airlines/`,
+                `api/airlines`,
                 data
             ).then(async (result) => {
                 if(result.data.message !== undefined){
