@@ -67,7 +67,7 @@ class Handler extends ExceptionHandler
              $errors = $this->parseMessageBag($exception->validator->errors()->getMessages());
              if ($request->expectsJson()){
                  return $this->errorResponse("Invalid Data",
-                     Response::HTTP_UNPROCESSABLE_ENTITY,['errors'=>$errors]);
+                     422,['errors'=>$errors]);
              }
         }
 
@@ -75,7 +75,7 @@ class Handler extends ExceptionHandler
             return parent::render($request, $exception);
         }
 
-        return $this->errorResponse('Unexpected error. Try later', Response::HTTP_INTERNAL_SERVER_ERROR);
+        return $this->errorResponse('Unexpected error. Try later', 500);
 
     }
 }
