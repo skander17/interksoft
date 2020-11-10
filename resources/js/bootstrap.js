@@ -20,8 +20,8 @@ window._ = require('lodash');
  */
 
 window.axios = require('axios');
-window.axios.defaults.withCredentials = window.location.protocol + '//' + window.location.host;
-window.axios.defaults.baseURL = true;
+window.axios.defaults.withCredentials = true;
+window.axios.defaults.baseURL = window.location.protocol + '//' + window.location.host;
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
