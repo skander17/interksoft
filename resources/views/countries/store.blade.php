@@ -42,7 +42,7 @@
         const sendCreate = (data) => {
             let message = 'Error al guardar país';
             window.axios({
-                url: `api/countries/`,
+                url: `api/countries`,
                 method: "POST",
                 data: data
             }).then(async (result) => {

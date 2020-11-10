@@ -53,7 +53,7 @@
         const sendCreate = (data) => {
             let message = 'Error al guardar aeropuerto';
             window.axios({
-                url: `api/airports/`,
+                url: `api/airports`,
                 method: "POST",
                 data: data
             }).then(async (result) => {

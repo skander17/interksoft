@@ -66,7 +66,7 @@
         const sendCreate = (data) => {
             let message = 'Error al guardar cliente';
             window.axios({
-                url: `api/clients/`,
+                url: `api/clients`,
                 method: "POST",
                 data: data
             }).then(async (result) => {

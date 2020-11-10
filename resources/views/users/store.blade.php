@@ -70,7 +70,7 @@
         const sendCreate = (data) => {
             let message = 'Error al guardar usuarios';
             window.axios({
-                url: `api/users/`,
+                url: `api/users`,
                 method: "POST",
                 data: data
             }).then(async (result) => {
@@ -156,7 +156,7 @@
             }
             setFormValidation('#user-form',() =>{
                 sendUpdate(id,getFormObject('#user-form'))
-            });
+            },rules);
         };
 
         const create = () => setFormValidation('#user-form', () =>{
