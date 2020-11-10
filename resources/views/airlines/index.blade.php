@@ -85,9 +85,9 @@
             }).then((result) => {
                 if (result.value) {
                     let message = 'Error al borrar la aerolinea';
-                    window.axios.delete({
-                        url: `api/airlines/${client_id}`
-                    }).then(async (result) => {
+                    window.axios.delete(
+                         `api/airlines/${client_id}`
+                    ).then(async (result) => {
                         if(result.data.message !== undefined){
                             message = result.data.message;
                         }
