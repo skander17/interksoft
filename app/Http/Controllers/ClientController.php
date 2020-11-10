@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException;
 class ClientController extends Controller
 {
     protected array $storeRules = [
-        'ful_name' => ['required', 'string', 'max:255'],
+        'full_name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:clients'],
         'passport' => ['required'],
         'passport_exp' => ['required'],
