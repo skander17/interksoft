@@ -1,7 +1,7 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form" action id="user-form" novalidate="novalidate">
+            <form class="form" id="user-form" novalidate="novalidate">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -38,7 +38,7 @@
             </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-info" id="save-modal">Guardar</button>
+                    <button type="submit" class="btn btn-info" id="save-user">Guardar</button>
                 </div>
             </form>
         </div>
@@ -137,21 +137,26 @@
         };
 
 
-        let update = (id) => {
+        let update = (id,password = false) => {
             console.log('id clicked');
             console.log(id);
-            setFormValidation('#user-form',() => sendUpdate(id,getFormObject('#user-form')),{
-                password: {
-                    required: true,
-                    minlength: 8
-                },
-                password_confirmation: {
-                    required: true,
-                    minlength: 8,
-                    equalTo: "#password"
+            let rules = {}
+            if (password){
+                rules = {
+                    password: {
+                        required: true,
+                            minlength: 8
+                    },
+                    password_confirmation: {
+                        required: true,
+                            minlength: 8,
+                            equalTo: "#password"
+                    }
                 }
-
-            })
+            }
+            setFormValidation('#user-form',() =>{
+                sendUpdate(id,getFormObject('#user-form'))
+            });
         };
 
         const create = () => setFormValidation('#user-form', () =>{
@@ -174,31 +179,32 @@
         });
         const cleanForm = document.getElementById("user-form").outerHTML;
         const throw_modal = async (action,user_id = null) => {
-            $("#save-modal").off('click');
             $("#user-form").html(cleanForm);
+            const save_modal = $("#save-user")
+            save_modal.off('click');
             if(action === 'create'){
                 $("#exampleModalLabel").text("Crear Usuario");
-                $('#save-modal').on('click', create() );
+                save_modal.on('click',() =>  create() );
             }else{
                 if (! user_id){
                     md.shotNotification('danger',"Error al obtener el usuario. Favor recargue a página");
-                    $("#save-modal").attr('disabled','disable');
+                    save_modal.attr('disabled','disable');
                     return;
                 }
+                let password = false;
                 if (action === 'password'){
                     $("#exampleModalLabel").text("Editar Contraseña");
                     $('#email').closest(".form-group").remove();
                     $('#name').closest(".form-group").remove();
+                    password = true;
                 }else{
                     $("#exampleModalLabel").text("Editar Usuario");
                     $('#password').closest(".form-group").remove();
                     $('#password_confirmation').closest(".form-group").remove();
-
                     const user = await getUser(user_id);
                     fillForm(user);
                 }
-                $('#save-modal').on('click',() => update(user_id) );
-
+                save_modal.on('click',() => update(user_id,password) );
             }
         }
     </script>
