@@ -41,9 +41,8 @@
     <script>
         const sendCreate = (data) => {
             let message = 'Error al guardar la aerolinea';
-            window.axios({
+            window.axios.post({
                 url: `api/airlines/`,
-                method: "POST",
                 data: data
             }).then(async (result) => {
                 if(result.data.message !== undefined){
@@ -70,9 +69,8 @@
 
         const sendUpdate = (id, data) => {
             let message = 'Error al editar la aerolinea';
-            window.axios({
+            window.axios.put({
                 url: `api/airlines/${id}`,
-                method: "PUT",
                 data: data
             }).then(async (result) => {
                 if(result.data.message !== undefined){
@@ -124,9 +122,8 @@
         const getAirline = async (id) => {
 
             try{
-                const request = window.axios({
-                    url: `api/airlines/${id}`,
-                    method: "GET"
+                const request = window.axios.get({
+                    url: `api/airlines/${id}`
                 });
                 const response = await request;
                 if (response.data.airline !== undefined){
