@@ -11,10 +11,10 @@
                 <div class="modal-body">
                     @csrf
                     <div class="form-group bmd-form-group">
-                        <label for="full_name" class="bmd-label-floating">
+                        <label for="ful_name" class="bmd-label-floating">
                             Nombre Completo (*)
                         </label>
-                        <input class="form-control" name="full_name" id="full_name" type="text"/>
+                        <input class="form-control" name="ful_name" id="ful_name" type="text"/>
                     </div>
                     <div class="form-group bmd-form-group">
                         <label for="dni" class="bmd-label-floating">
