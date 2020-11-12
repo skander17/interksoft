@@ -257,9 +257,9 @@ function setDataTable(id) {
         $(id).show();
     });
 }
-const fillForm = (form,object) =>{
+const fillForm = (object) =>{
     for (const key in object) {
-        let input = $(form).closest("#"+key);
+        let input = $("#"+key);
         if (input.length){
             input.attr('value',object[key]);
             input.closest('.form-group').addClass('is-filled')

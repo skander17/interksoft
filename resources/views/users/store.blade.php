@@ -123,7 +123,7 @@
                     $('#password_confirmation').closest(".form-group").remove();
                     const user = await window.Users.getUser(user_id);
                     console.log(user);
-                    fillForm("#user-form",user);
+                    fillForm(user);
                 }
                 save_modal.on('click',async () => await update(user_id,password) );
             }
