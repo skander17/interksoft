@@ -25,7 +25,6 @@ class CreateTicketsTable extends Migration
             $table->foreignId('client_id')->index()->unsigned();
             $table->foreignId('airline_id')->index()->unsigned();
             $table->foreignId('user_id')->index()->unsigned();
-            $table->foreignId('state_id')->index()->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
@@ -35,7 +34,6 @@ class CreateTicketsTable extends Migration
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('airline_id')->references('id')->on('airlines');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('state_id')->references('id')->on('states');
         });
     }
 

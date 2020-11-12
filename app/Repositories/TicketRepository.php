@@ -7,7 +7,7 @@ namespace App\Repositories;
 
 use App\Models\Ticket;
 
-class TicketsRepository extends Repository
+class TicketRepository extends Repository
 {
     public function __construct(Ticket $model)
     {

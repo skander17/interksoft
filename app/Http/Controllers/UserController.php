@@ -21,6 +21,7 @@ class UserController extends Controller
     ];
 
     protected string $name = "user";
+    protected string $reportTitle = "Reporte de Usuarios";
     public function __construct(UserRepository $repository)
     {
         parent::__construct($repository);

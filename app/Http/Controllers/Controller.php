@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\Repository;
+use App\Services\ReportService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -20,6 +21,8 @@ class Controller extends BaseController
     protected array $messages = [];
     protected ?Repository $repository;
     protected string $name = "recurso";
+    protected array $alias = [];
+    protected string $reportTitle = '';
 
     public function __construct(Repository $repository = null)
     {
@@ -84,10 +87,26 @@ class Controller extends BaseController
     /**
      * @param $id
      * @return JsonResponse
+     * @throws \Exception
      */
     public function destroy($id){
         $this->repository->destroy($id);
         return $this->jsonResponse('Registro Eliminado',206);
 
+    }
+
+
+    public function report(Request $request){
+        $user = $request->user()->name;
+        if (count($this->alias) == 0){
+            $record = array_keys($this->repository->getModel()->newQuery()->first()->toArray());
+            $this->alias = array_combine($record,$record);
+        }
+        ReportService::report()
+                ->setData($this->repository->index()->toArray())
+                ->setIndex($this->alias)
+                ->setTitle($this->reportTitle)
+                ->setUsername($user)
+                ->render('automatic');
     }
 }

@@ -95,7 +95,7 @@
                 }
             }
 
-            setFormValidation('#user-form', async () => callback ,rules)
+            setFormValidation('#user-form', await callback ,rules)
         };
 
         const throw_modal = async (action,user_id = null) => {

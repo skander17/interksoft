@@ -30,4 +30,8 @@ class Client extends Model
         'birth_date' => 'date:Y-m-d',
         'passport_exp' => 'date:Y-m-d',
     ];
+
+    public function tickets(){
+        return $this->hasMany(Ticket::class);
+    }
 }

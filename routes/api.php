@@ -28,8 +28,10 @@ Route::middleware('auth')->post('/users','App\Http\Controllers\UserController@st
 
 Route::resource('clients', 'App\Http\Controllers\ClientController', ['only' => ['show','store','update','destroy']]);
 
-
-
 Route::resource('airports', 'App\Http\Controllers\AirportController', ['only' => ['show','store','update','destroy']]);
+
 Route::resource('countries', 'App\Http\Controllers\CountryController', ['only' => ['show','store','update','destroy']]);
+
 Route::resource('airlines', 'App\Http\Controllers\AirlineController', ['only' => ['show','store','update','destroy']]);
+
+Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['show','store','update','destroy']]);

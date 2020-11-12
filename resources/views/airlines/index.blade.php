@@ -6,9 +6,15 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header card-header-info">
-                            <h4 class="card-title ">Aerolineas</h4>
-                            <p class="card-category"> Lista de Aerolias</p>
+                        <div class="card-header card-header-info row">
+                            <h4 class="col-12 card-title ">Aerolineas</h4>
+                            <p class="col-8 card-category"> Lista de aerolineas</p>
+                            <a href="{{ url('report/airlines')}}" target="_blank"  class="col-4">
+                                <button class="btn btn-danger btn-fab btn-round btn-md"
+                                        data-toggle="tooltip" data-placement="bottom" title="Exportar">
+                                    <i class="material-icons">picture_as_pdf</i>
+                                </button>
+                            </a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

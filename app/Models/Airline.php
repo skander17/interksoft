@@ -16,4 +16,8 @@ class Airline extends Model
         "description",
         "code"
     ];
+
+    public function tickets(){
+        $this->hasMany(Ticket::class);
+    }
 }

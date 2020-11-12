@@ -14,6 +14,9 @@ class Repository
         $this->model = $model;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|Model[]
+     */
     public function index(){
         return $this->model::all();
     }
