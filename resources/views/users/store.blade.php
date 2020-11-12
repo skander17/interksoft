@@ -89,13 +89,13 @@
                 }
             }
             const callback = async () =>{
-                const request =await window.Users.postUser(getFormObject('#user-form'));
+                const request = await window.Users.postUser(getFormObject('#user-form'));
                 if (request){
                     window.location.reload();
                 }
             }
 
-            setFormValidation('#user-form',await callback,rules)
+            setFormValidation('#user-form', async () => callback ,rules)
         };
 
         const throw_modal = async (action,user_id = null) => {
