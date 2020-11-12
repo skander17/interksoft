@@ -46,100 +46,9 @@
 </div>
 @push('js')
     <script>
+        const cleanForm = document.getElementById("user-form").outerHTML;
 
-        const getUser =  async (id) => {
-
-            try{
-                const request = window.axios({
-                    url: `api/users/${id}`,
-                    method: "GET"
-                });
-                const response = await request;
-                if (response.data.user !== undefined){
-                    return response.data.user;
-                }
-                return {}
-            }catch (e){
-                console.log(e.message)
-                md.shotNotification('danger',"Error al obtener el usuario");
-                return {};
-            }
-        }
-
-
-        const sendCreate = (data) => {
-            let message = 'Error al guardar usuarios';
-            window.axios({
-                url: `api/users`,
-                method: "POST",
-                data: data
-            }).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 201){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const sendUpdate = (id, data) => {
-
-            let message = 'Error al editar el usuario';
-            window.axios({
-                url: `api/users/${id}`,
-                method: "PUT",
-                data: data
-            }).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 200){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const fillForm = (object) =>{
-            for (const key in object) {
-                let input = $("#"+key);
-                if (input.length){
-                    input.attr('value',object[key]);
-                    input.closest('.form-group').addClass('is-filled')
-                }
-            }
-        };
-
-
-        let update = (id,password = false) => {
-            console.log('id clicked');
-            console.log(id);
+        let update = async (id,password = false) => {
             let rules = {}
             if (password){
                 rules = {
@@ -154,37 +63,48 @@
                     }
                 }
             }
-            setFormValidation('#user-form',() =>{
-                sendUpdate(id,getFormObject('#user-form'))
-            },rules);
+            const callback = async () =>{
+                const request = await window.Users.putUser(id,getFormObject('#user-form'));
+                if (request){
+                    window.location.reload();
+                }
+            }
+            setFormValidation('#user-form', await callback,rules);
         };
 
-        const create = () => setFormValidation('#user-form', () =>{
-            sendCreate(getFormObject('#user-form'));
-        },{
-            email:{
-                required: true,
-                email:true
-            },
-            password: {
-                required: true,
-                minlength: 8
-            },
-            password_confirmation: {
-                required: true,
-                minlength: 8,
-                equalTo: "#password"
+        const create = async () =>{
+            let rules = {
+                email:{
+                    required: true,
+                    email:true
+                },
+                password: {
+                    required: true,
+                    minlength: 8
+                },
+                password_confirmation: {
+                    required: true,
+                    minlength: 8,
+                    equalTo: "#password"
+                }
+            }
+            const callback = async () =>{
+                const request =await window.Users.postUser(getFormObject('#user-form'));
+                if (request){
+                    window.location.reload();
+                }
             }
 
-        });
-        const cleanForm = document.getElementById("user-form").outerHTML;
+            setFormValidation('#user-form',await callback,rules)
+        };
+
         const throw_modal = async (action,user_id = null) => {
             $("#user-form").html(cleanForm);
             const save_modal = $("#save-user")
             save_modal.off('click');
             if(action === 'create'){
                 $("#exampleModalLabel").text("Crear Usuario");
-                save_modal.on('click',() =>  create() );
+                save_modal.on('click', async () => await create() );
             }else{
                 if (! user_id){
                     md.shotNotification('danger',"Error al obtener el usuario. Favor recargue a página");
@@ -201,10 +121,11 @@
                     $("#exampleModalLabel").text("Editar Usuario");
                     $('#password').closest(".form-group").remove();
                     $('#password_confirmation').closest(".form-group").remove();
-                    const user = await getUser(user_id);
-                    fillForm(user);
+                    const user = await window.Users.getUser(user_id);
+                    console.log(user);
+                    fillForm("#user-form",user);
                 }
-                save_modal.on('click',() => update(user_id,password) );
+                save_modal.on('click',async () => await update(user_id,password) );
             }
         }
     </script>

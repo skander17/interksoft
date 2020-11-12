@@ -133,15 +133,7 @@
 
 
         const update = (id) => {
-
-
-
-
             let callback = () => sendUpdate(id,getFormObject('#client-form'));
-
-
-
-
             setFormValidation('#client-form',callback)
         };
 

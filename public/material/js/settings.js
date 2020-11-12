@@ -257,3 +257,12 @@ function setDataTable(id) {
         $(id).show();
     });
 }
+const fillForm = (form,object) =>{
+    for (const key in object) {
+        let input = $(form).closest("#"+key);
+        if (input.length){
+            input.attr('value',object[key]);
+            input.closest('.form-group').addClass('is-filled')
+        }
+    }
+};
