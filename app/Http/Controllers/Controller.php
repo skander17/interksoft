@@ -27,7 +27,6 @@ class Controller extends BaseController
     public function __construct(Repository $repository = null)
     {
         $this->repository = $repository;
-        $this->middleware('auth');
     }
 
     /**
