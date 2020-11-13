@@ -12,7 +12,8 @@ class AuthController extends Controller
 {
     public function __construct(UserRepository $userRepository) {
         parent::__construct($userRepository);
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','getJWT']]);
+        $this->middleware('auth', ['only' => ['getJWT']]);
     }
 
     /**
@@ -92,8 +93,9 @@ class AuthController extends Controller
      *
      * @return JsonResponse
      */
-    public function userProfile() {
-        return response()->json(auth()->user());
+    public function getJWT() {
+        $token = \JWTAuth::fromUser(auth()->user());
+        return $this->createNewToken($token);
     }
 
     /**

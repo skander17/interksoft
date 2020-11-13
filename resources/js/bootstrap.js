@@ -20,7 +20,9 @@ window._ = require('lodash');
  */
 
 
-window.axios = require('./pluggins/axios.js');
+window.Auth = require('./pluggins/auth.js').default;
+
+window.axios = require('./pluggins/axios.js').default;
 
 window.Users = require('./components/users.js').default;
 /**

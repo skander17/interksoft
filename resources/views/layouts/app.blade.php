@@ -23,6 +23,11 @@
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
+            @push('js')
+                <script>
+                    window.Auth.checkToken();
+                </script>
+            @endpush
             @include('layouts.page_templates.auth')
         @endauth
         @guest()
