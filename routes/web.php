@@ -34,9 +34,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::resource('airports', 'App\Http\Controllers\AirportController', ['only' => ['index']]);
 
-
 	Route::resource('countries', 'App\Http\Controllers\CountryController', ['only' => ['index']]);
 
+    Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['index']]);
 
 
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);

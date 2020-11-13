@@ -14,5 +14,12 @@ class TicketRepository extends Repository
         parent::__construct($model);
     }
 
+    public function index()
+    {
+        return $this->model::with([
+            'client','origin_airport','arrival_airport','user','airline','operation'
+        ])->get();
+    }
+
 
 }

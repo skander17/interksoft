@@ -14,4 +14,13 @@ class ClientRepository extends Repository
         parent::__construct($model);
     }
 
+    /**
+     * @param string $name
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function search(string $name){
+        return $this->model::query()->select("full_name as name")->whereRaw(
+            "lower(full_name) LIKE lower(?)",["%$name%"]
+        )->get();
+    }
 }

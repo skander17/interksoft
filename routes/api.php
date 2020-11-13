@@ -27,6 +27,7 @@ Route::group(['middleware'=>'auth:api'],function (){
 
 
     Route::resource('clients', 'App\Http\Controllers\ClientController', ['only' => ['show','store','update','destroy']]);
+    Route::get('search/clients', 'App\Http\Controllers\ClientController@search');
 
     Route::resource('airports', 'App\Http\Controllers\AirportController', ['only' => ['show','store','update','destroy']]);
 
