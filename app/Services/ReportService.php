@@ -57,7 +57,8 @@ class ReportService
 
         $canvas->close_object();
         $canvas->add_object($footer, "all");
-        $pdf->stream('report.pdf', array('Attachment' => 0));
+        header("Content-type:application/pdf");
+        $pdf->stream('report.pdf', array('Attachment' => 1));
     }
 
     /**
