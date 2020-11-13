@@ -3,7 +3,6 @@ namespace App\Services;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 class ReportService
 {

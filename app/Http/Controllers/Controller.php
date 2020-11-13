@@ -101,6 +101,7 @@ class Controller extends BaseController
             $record = array_keys($this->repository->getModel()->newQuery()->first()->toArray());
             $this->alias = array_combine($record,$record);
         }
+        header("Content-type:application/pdf");
         ReportService::report()
                 ->setData($this->repository->index()->toArray())
                 ->setIndex($this->alias)
