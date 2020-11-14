@@ -17,6 +17,8 @@ class ClientController extends Controller
         'passport_exp' => ['required'],
     ];
 
+    protected string $reportTitle = "Reporte de Clientes";
+
     public function __construct(ClientRepository $repository)
     {
         $this->name = 'client';

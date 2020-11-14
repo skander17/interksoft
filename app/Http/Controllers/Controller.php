@@ -103,8 +103,8 @@ class Controller extends BaseController
     public function report(Request $request){
         $user = $request->user()->name;
         if (count($this->alias) == 0){
-            $record = array_keys($this->repository->getModel()->newQuery()->first()->toArray());
-            $this->alias = array_combine($record,$record);
+            $record = $this->repository->getModel()->newQuery()->first();
+            $this->alias =  $record ? array_combine(array_keys($record->toArray()),array_keys($record->toArray())): [];
         }
         return ReportService::report()
                 ->setData($this->repository->index()->toArray())
