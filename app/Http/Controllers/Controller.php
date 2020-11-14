@@ -113,4 +113,11 @@ class Controller extends BaseController
                 ->setUsername($user)
                 ->render('automatic');
     }
+
+    public function message($code,$message){
+        return response()->json([
+            'code' => $code,
+            'message' => $message
+        ]);
+    }
 }

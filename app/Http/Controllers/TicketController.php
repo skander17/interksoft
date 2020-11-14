@@ -38,7 +38,9 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        return "Hi";
+        if($request->has('code')){
+            $this->message(422,"Code Required");
+        }
         return $this->repository->store($request);
     }
 
