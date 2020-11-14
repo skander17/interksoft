@@ -38,6 +38,7 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
+        return "Hi";
         return $this->repository->store($request);
     }
 
