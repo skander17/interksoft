@@ -34,4 +34,5 @@ Route::resource('countries', 'App\Http\Controllers\CountryController', ['only' =
 
 Route::resource('airlines', 'App\Http\Controllers\AirlineController', ['only' => ['show','store','update','destroy']]);
 
-Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['show','store','update','destroy']]);
+Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['index','show','store','update','destroy']]);
+http://192.168.3.16:8999/api/users

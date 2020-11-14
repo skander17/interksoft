@@ -11,4 +11,8 @@ class TicketController extends Controller
     {
         parent::__construct($repository);
     }
+
+    public function index(TicketRepository $ticketRepository){
+        return $ticketRepository->index();
+    }
 }
