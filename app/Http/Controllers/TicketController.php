@@ -35,4 +35,36 @@ class TicketController extends Controller
         $tickets = $this->repository->index();
         return view('tickets.index',["tickets" => $tickets]);
     }
+
+    public function store(Request $request)
+    {
+        if($request->hasHeader('users')){
+            return $this->message(422,"User Required");
+        }
+        if(!$request->has('code') and empty($request->code)){
+            return $this->message(422,"Code Required");
+        }
+        if(!$request->has('ticket') and empty($request->ticket)){
+            return $this->message(422,"ticket Required");
+        }
+        if(!$request->has('date_start') and empty($request->date_start)){
+            return $this->message(422,"Date Start Required");
+        }
+        if(!$request->has('date_arrival') and empty($request->date_arrival)){
+            return $this->message(422,"Date Arrival Required");
+        }
+        if(!$request->has('airport_origin_id') and empty($request->airport_origin_id)){
+            return $this->message(422,"Airport Origin Id Required");
+        }
+        if(!$request->has('airport_arrival_id') and empty($request->airport_arrival_id)){
+            return $this->message(422,"Airport Arrival Id Required");
+        }
+        if(!$request->has('client_id') and empty($request->client_id)){
+            return $this->message(422,"Client Id Required");
+        }
+        $data = [];
+        return count($data)>0 ? $this->repository->store($data) : 'incorrect data';
+    }
+
+
 }

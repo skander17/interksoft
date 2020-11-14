@@ -40,3 +40,4 @@ Route::group(['middleware'=>'auth:api'],function (){
     Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['show','store','update','destroy']]);
 
 });
+

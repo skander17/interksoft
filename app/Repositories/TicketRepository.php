@@ -21,5 +21,10 @@ class TicketRepository extends Repository
         ])->get();
     }
 
+    public function store(array $data)
+    {
+        return "Hola";
+    }
+
 
 }
