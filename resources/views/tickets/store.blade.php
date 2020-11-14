@@ -128,7 +128,7 @@
                     }
                 });
             }
-            setFormValidation('#ticket-form',  callback,rules);
+            setFormValidation('#ticket-form',  callback(id),rules);
         };
 
         const create = () =>{
@@ -181,7 +181,8 @@
                 }else{
                     $("#ticketModalLabel").text("Editar Boleto");
                     const ticket = await window.Ticket.getTicket(ticket_id);
-                    fillForm(ticket);
+                    window.Ticket.fillModel(ticket)
+                    fillForm(window.Ticket.ticket);
                 }
                 save_modal.on('click', () => update(ticket_id) );
             }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\TicketRepository;
+use App\Services\ReportService;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -13,7 +14,7 @@ class TicketController extends Controller
         'airport_arrival_id' => ['required'],
         'date_start' => ['required'],
         'date_arrival' => ['required'],
-        'ticket' => ['required'],
+        'ticket' => ['required','unique:tickets'],
         'airline_id' => ['required']
     ];
     protected array  $messages = [
@@ -24,6 +25,7 @@ class TicketController extends Controller
         'date_arrival.required' => "La fecha de llegada es requerida",
         'ticket.required' => "El boleto es requerido",
         'airline_id.required' => "La Aerolinea es requerida",
+        'ticket.unique' => "El boleto ya se encuentra registrado",
     ];
     protected string $name = 'ticket';
     public function __construct(TicketRepository $repository)
@@ -38,33 +40,20 @@ class TicketController extends Controller
 
     public function store(Request $request)
     {
-        if($request->hasHeader('users')){
-            return $this->message(422,"User Required");
+        $request->merge(["user_id"=>auth()->user()->id]);
+        if (!$request->input('code')){
+            $request->merge(["code"=>$request->input('ticket')]);
         }
-        if(!$request->has('code') and empty($request->code)){
-            return $this->message(422,"Code Required");
-        }
-        if(!$request->has('ticket') and empty($request->ticket)){
-            return $this->message(422,"ticket Required");
-        }
-        if(!$request->has('date_start') and empty($request->date_start)){
-            return $this->message(422,"Date Start Required");
-        }
-        if(!$request->has('date_arrival') and empty($request->date_arrival)){
-            return $this->message(422,"Date Arrival Required");
-        }
-        if(!$request->has('airport_origin_id') and empty($request->airport_origin_id)){
-            return $this->message(422,"Airport Origin Id Required");
-        }
-        if(!$request->has('airport_arrival_id') and empty($request->airport_arrival_id)){
-            return $this->message(422,"Airport Arrival Id Required");
-        }
-        if(!$request->has('client_id') and empty($request->client_id)){
-            return $this->message(422,"Client Id Required");
-        }
-        $data = [];
-        return count($data)>0 ? $this->repository->store($data) : 'incorrect data';
+        return parent::store($request);
     }
 
 
+    public function report(Request $request)
+    {
+        return ReportService::report()
+            ->setData($this->repository->index())
+            ->setTitle("Reporte de Boletos")
+            ->setUsername($request->user()->name)
+            ->render('tickets');
+    }
 }

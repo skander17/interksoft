@@ -20,23 +20,37 @@
                         <div class="table-responsive">
                             <table class="table material-datatables" id="datatable" style="display: none">
                                 <thead class="text-body">
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Cliente</th>
-                                    <th>Aeropuerto Origen</th>
-                                    <th>Aeropuerto Destino</th>
-                                    <th>Acciones</th>
-                                </tr></thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Cliente</th>
+                                        <th>Aeropuerto Origen</th>
+                                        <th>Fecha-Hora Despegue</th>
+                                        <th>Aeropuerto Destino</th>
+                                        <th>Fecha-Hora Aterrizaje</th>
+                                        <th>Estado</th>
+                                        <th>Usuario Registrador</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                 @foreach($tickets as $ticket)
                                 <tr data-id = "{{$ticket->id}}">
                                     <td> {{ $ticket->code }} </td>
 
-                                    <td> {{ $ticket->client->ful_name }} </td>
+                                    <td> {{ $ticket->client->full_name }} </td>
 
-                                    <td> {{ $ticket->origin_airpot->name }} </td>
+                                    <td> {{ $ticket->airport_origin->name }} </td>
 
-                                    <td> {{ $ticket->arrival_airport->name}} </td>
+                                    <td> {{ $ticket->date_start}} </td>
+
+                                    <td> {{ $ticket->airport_arrival->name}} </td>
+
+                                    <td> {{ $ticket->date_arrival}} </td>
+
+                                    <td> {{ $ticket->operation->state->name }} </td>
+
+                                    <td> {{ $ticket->user->name }} </td>
+
 
                                     <td class="td-actions">
                                         <button type="button" class="btn btn-info btn-link throw-modal"
@@ -93,12 +107,13 @@
             });
 
             if (swal.value) {
-                const result = await window.Tickets.deleteTicket(ticket_id);
+                const result = await window.Ticket.deleteTicket(ticket_id);
                 if (result){
                     window.location.reload();
                 }
             }
         }catch (e){
+            console.log(e)
             md.shotNotification('danger',"Error al borrar el boleto")
         }
 

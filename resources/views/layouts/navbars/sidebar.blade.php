@@ -25,49 +25,37 @@
             </a>
         </li>
 
-        <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-            <a class="nav-link" href="{{ route('users.index') }}">
-                <i class="material-icons">groups</i>
-                <span class="sidebar-normal"> Lista de Usuarios </span>
-            </a>
-        </li>
         <li class="nav-item{{ $activePage == 'tickets' ? ' active' : '' }}">
             <a class="nav-link" href="{{ route('tickets.index') }}">
                 <i class="material-icons">receipt</i>
                 <span class="sidebar-normal"> Lista de Boletos </span>
             </a>
         </li>
-        <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#airCollapse" aria-expanded="true">
-                <i class="material-icons">list</i>
-                <p>Catalogos
-                    <b class="caret"></b>
-                </p>
+        <li class="nav-item{{ $activePage == 'airlines' ? ' active' : '' }}">
+            <a class="nav-link" href="{{ route('airlines.index') }}">
+                <i class="material-icons">airplanemode_active</i>
+                <p>Aerolineas</p>
             </a>
-            <div class="collapse {{($activePage == 'airlines' || $activePage == 'airports') ? 'active show' : '' }}" id="airCollapse">
-                <ul class="nav">
-                    <li class="nav-item{{ $activePage == 'airlines' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('airlines.index') }}">
-                            <i class="material-icons">airplanemode_active</i>
-                            <p>Aerolineas</p>
-                        </a>
-                    </li>
-                    <li class="nav-item{{ $activePage == 'airports' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('airports.index') }}">
-                            <i class="material-icons">local_airport</i>
-                            <p>Aeropuertos</p>
-                        </a>
-                    </li>
-                    <li class="nav-item{{ $activePage == 'countries' ? ' active' : '' }}">
-                        <a class="nav-link" href="{{ route('countries.index') }}">
-                            <i class="material-icons">flag</i>
-                            <p>Paises</p>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        </li>
+        <li class="nav-item{{ $activePage == 'airports' ? ' active' : '' }}">
+            <a class="nav-link" href="{{ route('airports.index') }}">
+                <i class="material-icons">local_airport</i>
+                <p>Aeropuertos</p>
+            </a>
+        </li>
+        <li class="nav-item{{ $activePage == 'countries' ? ' active' : '' }}">
+            <a class="nav-link" href="{{ route('countries.index') }}">
+                <i class="material-icons">flag</i>
+                <p>Paises</p>
+            </a>
         </li>
 
+        <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
+            <a class="nav-link" href="{{ route('users.index') }}">
+                <i class="material-icons">groups</i>
+                <span class="sidebar-normal"> Lista de Usuarios </span>
+            </a>
+        </li>
 
         <!--
 

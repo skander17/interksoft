@@ -5,11 +5,31 @@ export default {
         code: '',
         ticket: '',
         client_id: -1,
-        origin_airport_id: -1,
-        arrival_airport_id: -1,
+        client: '',
+        airport_origin_id: -1,
+        airport_arrival_id: -1,
+        airport_origin: '',
+        airport_arrival: '',
         airline_id: -1,
+        airline: '',
         date_start: '',
         date_arrival: ''
+    },
+    fillModel: function (response){
+        this.ticket = {
+            code: response.code,
+            ticket: response.ticket,
+            client_id: response.client_id,
+            client: response.client.full_name,
+            airport_origin_id: response.airport_origin_id,
+            airport_arrival_id: response.airport_arrival_id,
+            airport_origin: response.airport_origin.name,
+            airport_arrival: response.airport_arrival.name,
+            airline_id: response.airline_id,
+            airline: response.airline.ful_name,
+            date_start: response.date_start,
+            date_arrival: response.date_start
+        }
     },
     eachErrors: function(errors) {
         for (const messages in errors ) {

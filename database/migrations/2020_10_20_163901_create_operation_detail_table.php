@@ -13,9 +13,9 @@ class CreateOperationDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('operation_detail', function (Blueprint $table) {
+        Schema::create('operation_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('operation')->index()->unsigned();
+            $table->foreignId('operation_id')->index()->unsigned();
             $table->foreignId('state_id')->index()->unsigned();
             $table->foreignId('user_id')->index()->unsigned();
             $table->float('amount')->nullable();

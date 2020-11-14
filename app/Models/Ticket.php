@@ -11,6 +11,7 @@ class Ticket extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        "id",
         "code",
         "ticket",
         "date_start",
@@ -42,21 +43,29 @@ class Ticket extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function OriginAirport(){
-        return $this->belongsTo(Airport::class,'origin_airport');
+    public function airport_origin(){
+        return $this->belongsTo(Airport::class,'airport_origin_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function ArrivalAirport(){
-        return $this->belongsTo(Airport::class,'arrival_airport');
+    public function airport_arrival(){
+        return $this->belongsTo(Airport::class,'airport_arrival_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function operation(){
-        return $this->belongsTo(Operation::class,'arrival_airport');
+        return $this->hasOne(Operation::class);
     }
 }

@@ -6,7 +6,7 @@ use Dompdf\Options;
 
 class ReportService
 {
-    private static array $data = [];
+    private static $data;
     private static array $index = [];
     private static string $title = '';
     private static string $username = '';
@@ -77,10 +77,10 @@ class ReportService
 
 
     /**
-     * @param array $data
+     * @param miexed $data
      * @return ReportService
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         self::$data = $data;
         return self::$report;
