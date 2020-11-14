@@ -30,10 +30,12 @@ Route::group(['middleware'=>'auth:api'],function (){
     Route::get('search/clients', 'App\Http\Controllers\ClientController@search');
 
     Route::resource('airports', 'App\Http\Controllers\AirportController', ['only' => ['show','store','update','destroy']]);
+    Route::get('search/airports', 'App\Http\Controllers\AirportController@search');
 
     Route::resource('countries', 'App\Http\Controllers\CountryController', ['only' => ['show','store','update','destroy']]);
 
     Route::resource('airlines', 'App\Http\Controllers\AirlineController', ['only' => ['show','store','update','destroy']]);
+    Route::get('search/airlines', 'App\Http\Controllers\AirlineController@search');
 
     Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['show','store','update','destroy']]);
 

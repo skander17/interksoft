@@ -17,4 +17,16 @@ class AirlineRepository extends Repository
     {
         return $this->model::all();
     }
+
+    /**
+     * @param ?string $name
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function search(?string $input){
+        return $this->model::query()->whereRaw(
+            "lower(name) LIKE lower(?)",["%$input%"]
+        )->orWhereRaw(
+            "lower(code) LIKE lower(?)",["%$input%"]
+        )->get();
+    }
 }

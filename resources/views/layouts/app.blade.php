@@ -13,10 +13,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
     <!-- CSS Files
         <link href="{{ asset('material') }}/css/material-dashboard_2_0.css?v=2.1.1" rel="stylesheet" />-->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
         <link href="{{ asset('material') }}/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
         <!-- CSS Just for demo purpose, don't include it in your project -->
         <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" />
         <link href="{{ asset('material') }}/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+        <link href="{{asset('material')}}/css/daterangepicker.css" rel="stylesheet" />
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
@@ -63,14 +65,16 @@
         <script src="{{ asset('material') }}/js/plugins/jquery-jvectormap.js"></script>-->
         <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/
         <script src="{{ asset('material') }}/js/plugins/nouislider.min.js"></script>-->
-        <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>-->
+        <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
         <!-- Library for adding dinamically elements -->
         <script src="{{ asset('material') }}/js/plugins/arrive.min.js"></script>
         <!-- Chartist JS
         <script src="{{ asset('material') }}/js/plugins/chartist.min.js"></script>-->
         <!--  Notifications Plugin    -->
         <script src="{{ asset('material') }}/js/plugins/bootstrap-notify.js"></script>
+
+        <script src="{{asset('material')}}/js/plugins/daterangepicker.js"></script>
         <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
         <script src="{{ asset('material') }}/js/material-dashboard.js?v=2.1.1" type="text/javascript"></script>
         <!-- Material Dashboard DEMO methods, don't include it in your project! -->

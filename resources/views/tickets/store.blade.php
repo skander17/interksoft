@@ -16,6 +16,14 @@
                                 Cliente
                             </label>
                             <input class="typeahead form-control" name="client" id="client" type="search"/>
+                            <input class="typeahead form-control" name="client_id" id="client_id" type="hidden"/>
+                        </div>
+                        <div class="col-lg-6 form-group bmd-form-group">
+                            <label for="airline" class="bmd-label-floating">
+                                Aerolinea
+                            </label>
+                            <input class="typeahead form-control" name="airline" id="airline" type="search"/>
+                            <input class="typeahead form-control" name="airline_id" id="airline_id" type="hidden"/>
                         </div>
                         <div class="col-lg-6 form-group bmd-form-group">
                             <label for="code" class="bmd-label-floating">
@@ -23,18 +31,38 @@
                             </label>
                             <input class="form-control" name="code" id="code" type="text"/>
                         </div>
+                        <div class="col-lg-6 form-group bmd-form-group">
+                            <label for="ticket" class="bmd-label-floating">
+                                Boleto #
+                            </label>
+                            <input class="form-control" name="ticket" id="ticket" type="text"/>
+                        </div>
                         <div class="clearfix"></div>
                         <div class="col-lg-6 form-group bmd-form-group">
                             <label for="origin_airport" class="bmd-label-floating">
                                 Aeropuerto Origen
                             </label>
-                            <input class="form-control" name="origin_airport" id="origin_airport" type="text"/>
+                            <input class="form-control typeahead" name="origin_airport" id="origin_airport" type="text"/>
+                            <input class="form-control typeahead" name="origin_airport_id" id="origin_airport_id" type="hidden"/>
                         </div>
                         <div class="col-lg-6 form-group bmd-form-group">
                             <label for="arrival_airport" class="bmd-label-floating">
                                 Aeropuerto Destino
                             </label>
                             <input class="form-control" name="arrival_airport" id="arrival_airport" type="text"/>
+                            <input class="form-control typeahead" name="arrival_airport_id" id="arrival_airport_id" type="hidden"/>
+                        </div>
+                        <div class="col-lg-6 form-group bmd-form-group is-filled">
+                            <label for="date_origin" class="bmd-label-static">
+                                Fecha-Hora Despegue
+                            </label>
+                            <input class="form-control datetimepicker" name="date_origin" id="date_origin" type="text"/>
+                        </div>
+                        <div class="col-lg-6 form-group bmd-form-group is-filled">
+                            <label for="date_arrival" class="bmd-label-static">
+                                Fecha-Hora Arrivo
+                            </label>
+                            <input class="form-control datetimepicker" name="date_arrival" id="date_arrival" type="text"/>
                         </div>
                     </div>
                 </div>
@@ -49,6 +77,42 @@
 </div>
 @push('js')
     <script>
+
+        window.typeahead.typeahead({
+            element: "#client",
+            uri: "api/search/clients",
+            params: {
+                search: document.getElementById("client")
+            },
+            destination: document.getElementById("client_id")
+        });
+
+        window.typeahead.typeahead({
+            element: "#airline",
+            uri: "api/search/airlines",
+            params: {
+                search: document.getElementById("airline").value
+            },
+            destination: document.getElementById("airline_id")
+        });
+
+        window.typeahead.typeahead({
+            element: "#origin_airport",
+            uri: "api/search/airports",
+            params: {
+                search: document.getElementById("origin_airport").value
+            },
+            destination: document.getElementById("origin_airport_id")
+        });
+
+        window.typeahead.typeahead({
+            element: "#arrival_airport",
+            uri: "api/search/airports",
+            params: {
+                search: document.getElementById("arrival_airport").value
+            },
+            destination: document.getElementById("arrival_airport_id")
+        });
         const cleanForm = document.getElementById("ticket-form").outerHTML;
 
         let update = async (id,password = false) => {

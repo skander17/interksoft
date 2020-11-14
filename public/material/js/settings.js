@@ -173,6 +173,20 @@ $(document).ready(function() {
   }, 700);
 });
 
+$(document).ready(function (){
+    $('.datepicker').daterangepicker({
+        "singleDatePicker": true,
+        "applyButtonClasses": "btn-info"
+    })
+});
+
+$(document).ready(function (){
+    $('.datetimepicker').daterangepicker({
+        "singleDatePicker": true,
+        "timePicker": true,
+        "applyButtonClasses": "btn-info"
+    })
+});
 jQuery.extend(jQuery.validator.messages, {
     required: "Este campo es requerido",
     remote: "Por favor corrije éste campo.",

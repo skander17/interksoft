@@ -18,6 +18,7 @@ window._ = require('lodash');
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+window.typeahead = require('./components/autocomplete.js').default;
 
 window.Auth = require('./pluggins/auth.js').default;
 

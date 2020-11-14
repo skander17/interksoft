@@ -23,57 +23,13 @@
     text-overflow: ellipsis;
 }
 
-#autoComplete::-moz-placeholder {
-    color: rgba(255, 122, 122, 0);
-    -moz-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-
-#autoComplete:-ms-input-placeholder {
-    color: rgba(255, 122, 122, 0);
-    -ms-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-
 #autoComplete::placeholder {
     color: rgba(255, 122, 122, 0);
     transition: all 0.3s ease;
 }
 
-#autoComplete:hover::-moz-placeholder {
-    color: rgb(52, 58, 112);
-    -moz-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    -webkit-transition: all -webkit-transform 0.3s ease;
-}
-
-#autoComplete:hover:-ms-input-placeholder {
-    color: rgb(52, 58, 112);
-    -ms-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    -webkit-transition: all -webkit-transform 0.3s ease;
-}
-
 #autoComplete:hover::placeholder {
     color: rgb(52, 58, 112);
-    transition: all 0.3s ease;
-    -webkit-transition: all -webkit-transform 0.3s ease;
-}
-
-#autoComplete:focus::-moz-placeholder {
-    padding: 0.1rem 0.6rem;
-    font-size: 0.9rem;
-    color: rgb(57, 65, 110);
-    -moz-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    -webkit-transition: all -webkit-transform 0.3s ease;
-}
-
-#autoComplete:focus:-ms-input-placeholder {
-    padding: 0.1rem 0.6rem;
-    font-size: 0.9rem;
-    color: rgb(57, 65, 110);
-    -ms-transition: all 0.3s ease;
     transition: all 0.3s ease;
     -webkit-transition: all -webkit-transform 0.3s ease;
 }
@@ -86,17 +42,8 @@
     -webkit-transition: all -webkit-transform 0.3s ease;
 }
 
-#autoComplete::-moz-selection {
-    color: transparent;
-}
-
 #autoComplete::selection {
     color: transparent;
-}
-
-#autoComplete:focus::-moz-selection {
-    color: #fff;
-    background-color: rgb(122, 193, 255);
 }
 
 #autoComplete:focus::selection {
@@ -152,11 +99,6 @@
     background-color: #fff;
 }
 
-.autoComplete_result::-moz-selection {
-    color: rgba(255, 255, 255, 0);
-    background-color: rgba(255, 255, 255, 0);
-}
-
 .autoComplete_result::selection {
     color: rgba(255, 255, 255, 0);
     background-color: rgba(255, 255, 255, 0);
@@ -188,11 +130,6 @@
     opacity: 1;
     color: rgb(10, 148, 252);
     font-weight: bold;
-}
-
-.autoComplete_highlighted::-moz-selection {
-    color: rgba(255,255,255, 0);
-    background-color: rgba(255,2555,255, 0);
 }
 
 .autoComplete_highlighted::selection {
@@ -267,5 +204,3 @@
 .ul-style{
     display:contents ;
 }
-
-

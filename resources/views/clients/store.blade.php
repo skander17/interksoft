@@ -44,13 +44,13 @@
                         <label for="passport_exp" class="bmd-label-floating">
                             Fecha Vencimiento del Pasaporte(*)
                         </label>
-                        <input class="form-control" name="passport_exp" id="passport_exp" type="date"/>
+                        <input class="form-control datepicker" name="passport_exp" id="passport_exp" type="text"/>
                     </div>
                     <div class="bmd-form-group form-group is-filled">
                         <label for="birth_date" class="bmd-label-floating">
                             Fecha de Nacimiento
                         </label>
-                        <input class="form-control" name="birth_date" id="birth_date" type="date"/>
+                        <input class="form-control datepicker" name="birth_date" id="birth_date" type="text"/>
                     </div>
                 </div>
                 <div class="modal-footer">

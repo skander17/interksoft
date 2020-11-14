@@ -98,6 +98,654 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
+/***/ "./node_modules/@tarekraafat/autocomplete.js/src/helpers/polyfill.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@tarekraafat/autocomplete.js/src/helpers/polyfill.js ***!
+  \***************************************************************************/
+/*! exports provided: Polyfill */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Polyfill", function() { return Polyfill; });
+// Refs: https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
+const CustomEventPolyfill = (event, params) => {
+  params = params || { bubbles: false, cancelable: false, detail: undefined };
+  const evt = document.createEvent("CustomEvent");
+  evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+  return evt;
+};
+CustomEventPolyfill.prototype = window.Event.prototype;
+
+const CustomEventWrapper =
+  (typeof window.CustomEvent === "function" && window.CustomEvent) || CustomEventPolyfill;
+
+const initElementClosestPolyfill = () => {
+  // Element.prototype.closest
+  // Refs: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+  if (!Element.prototype.matches) {
+    Element.prototype.matches =
+      Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+  }
+  if (!Element.prototype.closest) {
+    Element.prototype.closest = function(s) {
+      let el = this;
+      do {
+        if (el.matches(s)) {
+          return el;
+        }
+        el = el.parentElement || el.parentNode;
+      } while (el !== null && el.nodeType === 1);
+      return null;
+    };
+  }
+};
+
+const Polyfill = {
+  CustomEventWrapper,
+  initElementClosestPolyfill,
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/@tarekraafat/autocomplete.js/src/models/autoComplete.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/@tarekraafat/autocomplete.js/src/models/autoComplete.js ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return autoComplete; });
+/* harmony import */ var _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../views/autoCompleteView */ "./node_modules/@tarekraafat/autocomplete.js/src/views/autoCompleteView.js");
+/* harmony import */ var _helpers_polyfill__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/polyfill */ "./node_modules/@tarekraafat/autocomplete.js/src/helpers/polyfill.js");
+
+
+
+class autoComplete {
+  constructor(config) {
+    const {
+      selector = "#autoComplete", // User input selector
+      data: {
+        key, // Data src key selection
+        src, // Data src selection
+        cache = true, // Flag to cache data src
+      },
+      query, // Query interceptor function
+      trigger: {
+        event = ["input"], // autoCompleteJS event
+        condition = false, // condition trigger
+      } = {},
+      searchEngine = "strict", // Search engine type
+      threshold = 0, // Minimum characters length before engine starts rendering
+      debounce = 0, // Minimum duration for API calls debouncing,
+      resultsList: {
+        render = false,
+        container = false,
+        destination, // Results list selector
+        position = "afterend", // Results list position
+        element: resultsListElement = "ul", // Results list element tag
+        navigation = false, // Results list navigation
+      } = {},
+      sort = false, // Sorting results list
+      placeHolder, // Placeholder text
+      maxResults = 5, // Maximum number of results to show
+      resultItem: {
+        content = false, // Result item function
+        element: resultItemElement = "li", // Result item element tag
+      } = {},
+      noResults, // No results action
+      highlight = false, // Highlighting matching results
+      onSelection, // Action function on result selection
+    } = config;
+
+    // Build results list DOM element
+    const resultsListView = render
+      ? _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__["autoCompleteView"].createResultsList({
+        container,
+        destination: destination || _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__["autoCompleteView"].getInput(selector),
+        position,
+        element: resultsListElement,
+      })
+      : null;
+
+    this.selector = selector;
+    this.data = {
+      src: () => (typeof src === "function" ? src() : src),
+      key,
+      cache,
+    };
+    this.query = query;
+    this.trigger = {
+      event,
+      condition,
+    };
+    this.searchEngine =
+      searchEngine === "loose" ? "loose" : typeof searchEngine === "function" ? searchEngine : "strict";
+    this.threshold = threshold;
+    this.debounce = debounce;
+    this.resultsList = {
+      render,
+      view: resultsListView,
+      navigation,
+    };
+    this.sort = sort;
+    this.placeHolder = placeHolder;
+    this.maxResults = maxResults;
+    this.resultItem = {
+      content,
+      element: resultItemElement,
+    };
+    this.noResults = noResults;
+    this.highlight = highlight;
+    this.onSelection = onSelection;
+
+    // Starts the app Engine
+    this.init();
+  }
+
+  /**
+   * Search common characters within record
+   *
+   * @param query
+   * @param record
+   *
+   * @return {*}
+   */
+  search(query, record) {
+    // Current record value toLowerCase
+    const recordLowerCase = record.toLowerCase();
+    // Loose mode
+    if (this.searchEngine === "loose") {
+      // Search query string sanitized & normalized
+      query = query.replace(/ /g, "");
+      // Array of matching characters
+      const match = [];
+      // Query character position based on success
+      let searchPosition = 0;
+      // Iterate over record characters
+      for (let number = 0; number < recordLowerCase.length; number++) {
+        // Holds current record character
+        let recordChar = record[number];
+        // Matching case
+        if (searchPosition < query.length && recordLowerCase[number] === query[searchPosition]) {
+          // Highlight matching character
+          recordChar = this.highlight ? _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__["autoCompleteView"].highlight(recordChar) : recordChar;
+          // Increment search position
+          searchPosition++;
+        }
+        // Adds matching character to the matching list
+        match.push(recordChar);
+      }
+      // Non-Matching case
+      if (searchPosition !== query.length) {
+        return false;
+      }
+      // Return the joined match
+      return match.join("");
+      // Strict mode
+    } else {
+      if (recordLowerCase.includes(query)) {
+        // Regular Expression Query Pattern Ignores caseSensetive
+        const pattern = new RegExp(`${query}`, "i");
+        // Search for a match Query in Record
+        query = pattern.exec(record);
+        // Returns the match
+        return this.highlight ? record.replace(query, _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__["autoCompleteView"].highlight(query)) : record;
+      }
+    }
+  }
+
+  /**
+   * List all matching results
+   *
+   * @param data
+   *
+   * @return {*}
+   */
+  listMatchedResults(data) {
+    return new Promise(resolve => {
+      // Final highlighted results list
+      const resList = [];
+      // Checks input has matches in data source
+      data.filter((record, index) => {
+        // Search/Matching function
+        const search = key => {
+          // This Record value
+          const recordValue = key ? record[key] : record;
+          // Check if record does exist before search
+          if (recordValue) {
+            // Holds match value
+            const match =
+              typeof this.searchEngine === "function"
+                ? this.searchEngine(this.queryValue, recordValue)
+                : this.search(this.queryValue, recordValue);
+            // Push match to results list with key if set
+            if (match && key) {
+              resList.push({
+                key,
+                index,
+                match,
+                value: record,
+              });
+              // Push match to results list without key if not set
+            } else if (match && !key) {
+              resList.push({
+                index,
+                match,
+                value: record,
+              });
+            }
+          }
+        };
+        // Checks if data key is set
+        if (this.data.key) {
+          // Iterates over all set data keys
+          for (const key of this.data.key) {
+            search(key);
+          }
+          // If no data key not set
+        } else {
+          search();
+        }
+      });
+      // Sorting / Slicing final results list
+      const list = this.sort
+        ? resList.sort(this.sort).slice(0, this.maxResults)
+        : resList.slice(0, this.maxResults);
+      // Returns rendered list
+      return resolve({
+        matches: resList.length,
+        list,
+      });
+    });
+  }
+
+  /**
+   * App Engine Ignition.
+   *
+   * @return void
+   */
+  ignite() {
+    // Specified Input field selector
+    const input = _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__["autoCompleteView"].getInput(this.selector);
+    // Placeholder setter
+    if (this.placeHolder) {
+      input.setAttribute("placeholder", this.placeHolder);
+    }
+
+    /**
+     * Debouncer
+     *
+     * @param func
+     * @param delay
+     *
+     * @return void
+     */
+    const debounce = (func, delay) => {
+      let inDebounce;
+      return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(inDebounce);
+        inDebounce = setTimeout(() => func.apply(context, args), delay);
+      };
+    };
+
+    /**
+     * Excute autoComplete processes
+     *
+     * @param event
+     *
+     * @return void
+     */
+    const exec = event => {
+      // Gets the input search value
+      const inputValue =
+        input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement
+          ? input.value.toLowerCase()
+          : input.innerHTML.toLowerCase();
+      // Intercept query value
+      const queryValue = (this.queryValue =
+        this.query && this.query.manipulate ? this.query.manipulate(inputValue) : inputValue);
+      // resultsList Render Switch
+      const renderResultsList = this.resultsList.render;
+      // App triggering condition
+      const triggerCondition = this.trigger.condition
+        ? this.trigger.condition(queryValue)
+        : queryValue.length > this.threshold && queryValue.replace(/ /g, "").length;
+
+      /**
+       * Event emitter on input field
+       *
+       * @param event
+       * @param results
+       *
+       * @return void
+       */
+      const eventEmitter = (event, results) => {
+        // Dispatch event on input
+        input.dispatchEvent(
+          new _helpers_polyfill__WEBPACK_IMPORTED_MODULE_1__["Polyfill"].CustomEventWrapper("autoComplete", {
+            bubbles: true,
+            detail: {
+              event,
+              input: inputValue,
+              query: queryValue,
+              matches: results ? results.matches : null,
+              results: results ? results.list : null,
+            },
+            cancelable: true,
+          }),
+        );
+      };
+      // Checks if results will be rendered or NOT
+      if (renderResultsList) {
+        const resultsList = this.resultsList.view;
+        // Clear Results function holder
+        const clearResults = _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__["autoCompleteView"].clearResults(resultsList);
+        // Check if input is not empty
+        // or just have space before triggering the app
+        if (triggerCondition) {
+          // > List matching results
+          this.listMatchedResults(this.dataStream, event).then(list => {
+            // 1- Event emitter on input field
+            eventEmitter(event, list);
+            // 2- If resultsList set to render
+            if (this.resultsList.render) {
+              // 3- Checks if there's results
+              if (list.list.length === 0 && this.noResults) {
+                // 4- Runs noResults action function
+                this.noResults();
+              } else {
+                // 4- Rendering matching results to the UI list
+                _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__["autoCompleteView"].addResultsToList(resultsList, list.list, this.resultItem);
+                // 5- Gets user's selection
+                // If action configured
+                if (this.onSelection) {
+                  // 6- Keyboard & Mouse Navigation
+                  // If Navigation customMethod is set or default
+                  this.resultsList.navigation
+                    ? this.resultsList.navigation(event, input, resultsList, this.onSelection, list)
+                    : _views_autoCompleteView__WEBPACK_IMPORTED_MODULE_0__["autoCompleteView"].navigation(input, resultsList, this.onSelection, list);
+                }
+              }
+            }
+          });
+        } else {
+          // Event emitter on input field
+          eventEmitter(event);
+          // clears all results list
+          clearResults;
+        }
+        // If results will NOT be rendered
+      } else if (!renderResultsList && triggerCondition) {
+        this.listMatchedResults(this.dataStream, event).then(list => {
+          // Event emitter on input field
+          eventEmitter(event, list);
+        });
+      }
+    };
+
+    /**
+     * autoComplete.js run processes
+     *
+     * @param event
+     *
+     * @return void
+     */
+    const run = event => {
+      // Check if data src set to be cached or NOT
+      // Resolve data src before assigning and excuting
+      Promise.resolve(this.data.cache ? this.dataStream : this.data.src()).then(data => {
+        // Assign resolved data to the main data stream
+        this.dataStream = data;
+        // Invoke execution function
+        exec(event);
+      });
+    };
+    // Updates results on input by default if navigation should be excluded
+    // If option is provided as true, results will be shown on focus if input has initial text
+    this.trigger.event.forEach(eventType => {
+      input.addEventListener(eventType, debounce(event => run(event), this.debounce));
+    });
+  }
+
+  /**
+   * Starts the app Engine
+   *
+   * @return void
+   */
+  init() {
+    // Checks if data set to be cached
+    if (this.data.cache) {
+      // Resolve data src before assigning and igniting
+      Promise.resolve(this.data.src()).then(data => {
+        // Assigning resolved data to the main data stream
+        this.dataStream = data;
+        // Invoke ignition function
+        this.ignite();
+      });
+      // Else if data is NOT set to be  cached
+    } else {
+      // Invoke ignition function
+      this.ignite();
+    }
+    // Polyfilling for IE11
+    _helpers_polyfill__WEBPACK_IMPORTED_MODULE_1__["Polyfill"].initElementClosestPolyfill();
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@tarekraafat/autocomplete.js/src/views/autoCompleteView.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/@tarekraafat/autocomplete.js/src/views/autoCompleteView.js ***!
+  \*********************************************************************************/
+/*! exports provided: autoCompleteView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "autoCompleteView", function() { return autoCompleteView; });
+const dataAttribute = "data-id";
+const select = {
+  resultsList: "autoComplete_list",
+  result: "autoComplete_result",
+  highlight: "autoComplete_highlighted",
+  selectedResult: "autoComplete_selected",
+};
+const keys = {
+  ENTER: 13,
+  ARROW_UP: 38,
+  ARROW_DOWN: 40,
+};
+
+/**
+ * Gets the user's input value
+ *
+ * @param selector
+ *
+ * @return Element
+ */
+const getInput = selector => (typeof selector === "string" ? document.querySelector(selector) : selector());
+
+/**
+ * Creates the results list HTML tag
+ *
+ * @param renderResults
+ *
+ * @return HTMLElement
+ */
+const createResultsList = renderResults => {
+  const resultsList = document.createElement(renderResults.element);
+  resultsList.setAttribute("id", select.resultsList);
+  if (renderResults.container) {
+    renderResults.container(resultsList);
+  }
+  renderResults.destination.insertAdjacentElement(renderResults.position, resultsList);
+  return resultsList;
+};
+
+/**
+ * Highlight matching values
+ *
+ * @param value
+ *
+ * @return string
+ */
+const highlight = value => `<span class=${select.highlight}>${value}</span>`;
+
+/**
+ * Adding matching results to the list
+ *
+ * @param resultsList
+ * @param dataSrc
+ * @param resultItem
+ *
+ * @return void
+ */
+const addResultsToList = (resultsList, dataSrc, resultItem) => {
+  const fragment = document.createDocumentFragment();
+  dataSrc.forEach((event, record) => {
+    const result = document.createElement(resultItem.element);
+    const resultIndex = dataSrc[record].index;
+    result.setAttribute(dataAttribute, resultIndex);
+    result.setAttribute("class", select.result);
+    resultItem.content ? resultItem.content(event, result) : (result.innerHTML = event.match || event);
+    fragment.appendChild(result);
+  });
+  resultsList.appendChild(fragment);
+};
+
+/**
+ * Clears the list of results
+ *
+ * @param resultsList
+ *
+ * @return string
+ */
+const clearResults = resultsList => (resultsList.innerHTML = "");
+
+/**
+ * onSelection function
+ *
+ * @param event
+ * @param field
+ * @param resultsList
+ * @param callback
+ * @param resultsValues
+ *
+ * @return void
+ */
+const onSelection = (event, field, resultsList, feedback, resultsValues, selection) => {
+  // Data feedback function invoked on user selection
+  feedback({
+    event,
+    query: field instanceof HTMLInputElement ? field.value : field.innerHTML,
+    matches: resultsValues.matches,
+    results: resultsValues.list.map(record => record.value),
+    selection: resultsValues.list.find(value => {
+      if (event.keyCode === keys.ENTER) {
+        return value.index === Number(selection.getAttribute(dataAttribute));
+      } else if (event.type === "mousedown") {
+        return value.index === Number(event.currentTarget.getAttribute(dataAttribute));
+      }
+    }),
+  });
+  // Clear Results after selection is made
+  clearResults(resultsList);
+};
+
+/**
+ * Keyboard Arrow Navigation
+ *
+ * @param input
+ * @param resultsList
+ * @param feedback
+ * @param resultsValues
+ *
+ * @return void
+ */
+const navigation = (input, resultsList, feedback, resultsValues) => {
+  // Locals
+  const li = resultsList.childNodes,
+    liLength = li.length - 1;
+  let liSelected = undefined,
+    next;
+  // Remove selection class
+  const removeSelection = direction => {
+    liSelected.classList.remove(select.selectedResult);
+    if (direction === 1) {
+      next = liSelected.nextSibling;
+    } else {
+      next = liSelected.previousSibling;
+    }
+  };
+  // Add selection class
+  const highlightSelection = current => {
+    liSelected = current;
+    liSelected.classList.add(select.selectedResult);
+  };
+  // Keyboard action
+  input.onkeydown = event => {
+    if (li.length > 0) {
+      // console.log(liSelected);
+      switch (event.keyCode) {
+        // Arrow Up
+        case keys.ARROW_UP:
+          if (liSelected) {
+            removeSelection(0);
+            if (next) {
+              highlightSelection(next);
+            } else {
+              highlightSelection(li[liLength]);
+            }
+          } else {
+            highlightSelection(li[liLength]);
+          }
+          break;
+        // Arrow Down
+        case keys.ARROW_DOWN:
+          if (liSelected) {
+            removeSelection(1);
+            if (next) {
+              highlightSelection(next);
+            } else {
+              highlightSelection(li[0]);
+            }
+          } else {
+            highlightSelection(li[0]);
+          }
+          break;
+        case keys.ENTER:
+          if (liSelected) {
+            onSelection(event, input, resultsList, feedback, resultsValues, liSelected);
+          }
+      }
+    }
+  };
+  // Mouse action
+  li.forEach(selection => {
+    selection.onmousedown = event => onSelection(event, input, resultsList, feedback, resultsValues);
+  });
+};
+
+const autoCompleteView = {
+  getInput,
+  createResultsList,
+  highlight,
+  addResultsToList,
+  navigation,
+  clearResults,
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -20156,6 +20804,7 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+window.typeahead = __webpack_require__(/*! ./components/autocomplete.js */ "./resources/js/components/autocomplete.js")["default"];
 window.Auth = __webpack_require__(/*! ./pluggins/auth.js */ "./resources/js/pluggins/auth.js")["default"];
 window.axios = __webpack_require__(/*! ./pluggins/axios.js */ "./resources/js/pluggins/axios.js")["default"];
 window.Users = __webpack_require__(/*! ./components/users.js */ "./resources/js/components/users.js")["default"];
@@ -20172,6 +20821,143 @@ window.Users = __webpack_require__(/*! ./components/users.js */ "./resources/js/
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/autocomplete.js":
+/*!*************************************************!*\
+  !*** ./resources/js/components/autocomplete.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tarekraafat_autocomplete_js_src_models_autoComplete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @tarekraafat/autocomplete.js/src/models/autoComplete */ "./node_modules/@tarekraafat/autocomplete.js/src/models/autoComplete.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  typeahead: function typeahead(config) {
+    return new _tarekraafat_autocomplete_js_src_models_autoComplete__WEBPACK_IMPORTED_MODULE_1__["default"]({
+      data: {
+        // Data src [Array, Function, Async] | (REQUIRED)
+        src: function () {
+          var _src = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+            var paramsKey, source;
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    // API key token
+                    // User search query
+                    // Fetch External Data Source
+                    for (paramsKey in config.params) {
+                      console.log(paramsKey);
+
+                      if (config.params[paramsKey] instanceof HTMLElement) {
+                        console.log(document.getElementById(config.params[paramsKey].id).value);
+                        config.params[paramsKey] = document.getElementById(config.params[paramsKey].id).value;
+                      }
+                    }
+
+                    console.log(config.params);
+                    _context.next = 4;
+                    return window.axios.get(config.uri, {
+                      params: config.params
+                    });
+
+                  case 4:
+                    source = _context.sent;
+                    _context.next = 7;
+                    return source.data;
+
+                  case 7:
+                    return _context.abrupt("return", _context.sent);
+
+                  case 8:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            }, _callee);
+          }));
+
+          function src() {
+            return _src.apply(this, arguments);
+          }
+
+          return src;
+        }(),
+        key: ["name", "full_name", "ful_name"],
+        cache: false
+      },
+
+      /*query: {                               // Query Interceptor               | (Optional)
+          manipulate: (query) => {
+              return query.replace("pizza", "burger");
+          }
+      },*/
+      sort: function sort(a, b) {
+        // Sort rendered results ascendingly | (Optional)
+        if (a.match < b.match) return -1;
+        if (a.match > b.match) return 1;
+        return 0;
+      },
+      placeHolder: config.placeholder || "",
+      // Place Holder text                 | (Optional)
+      selector: config.element,
+      // Input field selector              | (Optional)
+      //threshold: 3,                        // Min. Chars length to start Engine | (Optional)
+      debounce: 200,
+      // Post duration for engine to start | (Optional)
+      //searchEngine: "strict",              // Search Engine type/mode           | (Optional)
+      resultsList: {
+        // Rendered results list object      | (Optional)
+        render: true,
+
+        /* if set to false, add an eventListener to the selector for event type
+           "autoComplete" to handle the result */
+        container: function container(source) {
+          source.setAttribute("id", Math.random().toString(36).substring(7));
+          source.classList.add("ul-style");
+        },
+        destination: config.destination,
+        position: "afterend",
+        element: "ul"
+      },
+      //maxResults: 10,                         // Max. number of rendered results | (Optional)
+      highlight: true,
+      // Highlight matching results      | (Optional)
+      resultItem: {
+        // Rendered result item            | (Optional)
+        content: function content(data, source) {
+          source.innerHTML = data.match;
+        },
+        element: "li"
+      },
+      noResults: function noResults() {
+        // Action script on noResults      | (Optional)
+        var result = document.createElement("li");
+        result.setAttribute("class", "no_result");
+        result.setAttribute("tabindex", "1");
+        result.innerHTML = "No Results";
+        document.querySelector("#autoComplete_list").appendChild(result);
+      },
+      onSelection: function onSelection(feedback) {
+        // Action script onSelection event | (Optional)
+        config.destination.value = feedback.selection.value[config.select_id || 'id'];
+        document.querySelector(config.element).value = feedback.selection.value.name || feedback.selection.value.full_name || feedback.selection.value.ful_name;
+      }
+    });
+  }
+});
 
 /***/ }),
 

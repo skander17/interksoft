@@ -15,11 +15,11 @@ class ClientRepository extends Repository
     }
 
     /**
-     * @param string $name
+     * @param ?string $name
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function search(string $name){
-        return $this->model::query()->select("full_name as name")->whereRaw(
+    public function search(?string $name){
+        return $this->model::query()->whereRaw(
             "lower(full_name) LIKE lower(?)",["%$name%"]
         )->get();
     }

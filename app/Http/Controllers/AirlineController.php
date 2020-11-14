@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\AirlineRepository;
+use Illuminate\Http\Request;
 
 class AirlineController extends Controller
 {
@@ -22,6 +23,10 @@ class AirlineController extends Controller
     public function index(AirlineRepository $repository)
     {
         return view('airlines.index', ['airlines' => $repository->index()]);
+    }
+
+    public function search(Request $request){
+        $result = $this->repository->search($request->input('search'));
     }
 
 }
