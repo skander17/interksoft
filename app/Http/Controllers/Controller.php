@@ -27,7 +27,6 @@ class Controller extends BaseController
     public function __construct(Repository $repository = null)
     {
         $this->repository = $repository;
-        $this->middleware('auth');
     }
 
     /**
@@ -96,13 +95,18 @@ class Controller extends BaseController
     }
 
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function report(Request $request){
         $user = $request->user()->name;
         if (count($this->alias) == 0){
             $record = array_keys($this->repository->getModel()->newQuery()->first()->toArray());
             $this->alias = array_combine($record,$record);
         }
-        ReportService::report()
+        return ReportService::report()
                 ->setData($this->repository->index()->toArray())
                 ->setIndex($this->alias)
                 ->setTitle($this->reportTitle)

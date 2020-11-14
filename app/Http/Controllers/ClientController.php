@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\ClientRepository;
+use FontLib\Table\Type\name;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -25,5 +26,10 @@ class ClientController extends Controller
     public function index(ClientRepository $repository)
     {
         return view('clients.index', ['clients' => $repository->index()]);
+    }
+
+    public function search(Request $request){
+        return response()
+            ->json($this->repository->search($request->input('search'))->toArray());
     }
 }

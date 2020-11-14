@@ -48,7 +48,7 @@
     <script>
         const cleanForm = document.getElementById("user-form").outerHTML;
 
-        let update = async (id,password = false) => {
+        let update =  (id,password = false) => {
             let rules = {}
             if (password){
                 rules = {
@@ -63,16 +63,17 @@
                     }
                 }
             }
-            const callback = async () =>{
-                const request = await window.Users.putUser(id,getFormObject('#user-form'));
-                if (request){
-                    window.location.reload();
-                }
+            const callback =  () =>{
+                window.Users.putUser(id,getFormObject('#user-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
+                    }
+                });
             }
-            setFormValidation('#user-form', await callback,rules);
+            setFormValidation('#user-form', callback,rules);
         };
 
-        const create = async () =>{
+        const create = () =>{
             let rules = {
                 email:{
                     required: true,
@@ -88,14 +89,15 @@
                     equalTo: "#password"
                 }
             }
-            const callback = async () =>{
-                const request = await window.Users.postUser(getFormObject('#user-form'));
-                if (request){
-                    window.location.reload();
-                }
+            const callback =  () =>{
+                window.Users.postUser(getFormObject('#user-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
+                    }
+                });
             }
 
-            setFormValidation('#user-form', await callback ,rules)
+            setFormValidation('#user-form', callback ,rules)
         };
 
         const throw_modal = async (action,user_id = null) => {
@@ -104,7 +106,7 @@
             save_modal.off('click');
             if(action === 'create'){
                 $("#exampleModalLabel").text("Crear Usuario");
-                save_modal.on('click', async () => await create() );
+                save_modal.on('click', () => create() );
             }else{
                 if (! user_id){
                     md.shotNotification('danger',"Error al obtener el usuario. Favor recargue a página");
@@ -125,7 +127,7 @@
                     console.log(user);
                     fillForm(user);
                 }
-                save_modal.on('click',async () => await update(user_id,password) );
+                save_modal.on('click', () => update(user_id,password) );
             }
         }
     </script>

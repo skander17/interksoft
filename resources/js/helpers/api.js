@@ -11,10 +11,10 @@ export default {
     },
     post: async (uri,data) => {
         try{
-            return await  custom_axios.post(uri,data);
+            return await custom_axios.post(uri,data);
         }catch (e){
             console.log(e);
-            return e.response || {status:0,message:"No hay conexión con el servidor"}
+            return e.response || {status:0,data:{message:"No hay conexión con el servidor"}}
         }
     },
     put: async (uri,data) => {

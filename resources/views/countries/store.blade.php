@@ -39,120 +39,47 @@
 </div>
 @push('js')
     <script>
-        const sendCreate = (data) => {
-            let message = 'Error al guardar país';
-            window.axios({
-                url: `api/countries`,
-                method: "POST",
-                data: data
-            }).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 201){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const sendUpdate = (id, data) => {
-            let message = 'Error al editar el país';
-            window.axios({
-                url: `api/countries/${id}`,
-                method: "PUT",
-                data: data
-            }).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 200){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const fillForm = (object) =>{
-            for (const key in object) {
-                let input = $("#"+key);
-                if (input.length){
-                    input.attr('value',object[key]);
-                    input.closest('.form-group').addClass('is-filled')
-                }
-            }
-        };
-
 
         const update = (id) => {
-            let callback = () => sendUpdate(id,getFormObject('#country-form'));
+            const callback =  () =>{
+                window.Country.putCountry(id,getFormObject('#country-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
+                    }
+                });
+            }
             setFormValidation('#country-form',callback)
         };
 
-        const create = () => setFormValidation('#country-form', () =>{
-            sendCreate(getFormObject('#country-form'));
-        },{
-            email:{
-                required: true,
-                email:true
-            },
-            password: {
-                required: true,
-                minlength: 8
-            },
-            password_confirmation: {
-                required: true,
-                minlength: 8,
-                equalTo: "password"
-            }
-
-        });
-
-        const getUser = async (id) => {
-
-            try{
-                const request = window.axios({
-                    url: `api/countries/${id}`,
-                    method: "GET"
+        const create = () => {
+            const callback = () => {
+                window.Country.postCountry(getFormObject('#country-form')).then((request) => {
+                    if (request) {
+                        window.location.reload();
+                    }
                 });
-                const response = await request;
-                if (response.data.user !== undefined){
-                    return response.data.user;
-                }
-                return {}
-            }catch (e){
-                console.log(e.message)
-                md.shotNotification('danger',"Error al obtener el país");
-                return {};
             }
-        }
+
+            const rules = {
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 8
+                },
+                password_confirmation: {
+                    required: true,
+                    minlength: 8,
+                    equalTo: "password"
+                }
+            }
+            setFormValidation('#country-form', callback, rules)
+        };
         const cleanForm = document.getElementById("country-form").outerHTML;
 
-        const throw_modal = async (action,user_id = null) => {
+        const throw_modal = async (action,country_id = null) => {
             $("#client-form").html(cleanForm);
             const save_modal = $("#save-modal")
             save_modal.off('click');
@@ -161,10 +88,10 @@
                 save_modal.on('click', () => create() );
             }else{
                 $("#exampleModalLabel").text("Editar País");
-                if (user_id){
-                    const user = await getUser(user_id);
-                    fillForm(user);
-                    save_modal.on('click', () =>  update(user_id) );
+                if (country_id){
+                    const country = await Country.getCountry(country_id);
+                    fillForm(country);
+                    save_modal.on('click', () =>  update(country_id) );
                 }else{
                     md.shotNotification('danger',"Error al obtener el país");
                     save_modal.attr('disabled','disable');

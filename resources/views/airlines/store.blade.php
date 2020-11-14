@@ -38,124 +38,54 @@
     </div>
 </div>
 @push('js')
-    <script>
-        const sendCreate = (data) => {
-            let message = 'Error al guardar la aerolinea';
-            window.axios.post(
-                `api/airlines`,
-                data
-            ).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 201){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const sendUpdate = (id, data) => {
-            let message = 'Error al editar la aerolinea';
-            window.axios.put(
-                `api/airlines/${id}`,
-                data
-            ).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 200){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const fillForm = (object) =>{
-            for (const key in object) {
-                let input = $("#"+key);
-                if (input.length){
-                    input.attr('value',object[key]);
-                    input.closest('.form-group').addClass('is-filled')
-                }
-            }
-        };
-
-
-        const update = (id) => {
-            let callback = () => sendUpdate(id,getFormObject('#airline-form'));
-            setFormValidation('#airline-form',callback)
-        };
-
-        const create = () => setFormValidation('#airline-form', () =>{
-            sendCreate(getFormObject('#airline-form'));
-        },{
-                ful_name: {
-                    required: true
-                }
-        });
-
-        const getAirline = async (id) => {
-
-            try{
-                const request = window.axios.get(
-                    `api/airlines/${id}`
-                );
-                const response = await request;
-                if (response.data.airline !== undefined){
-                    return response.data.airline;
-                }
-                return {}
-            }catch (e){
-                console.log(e.message)
-                md.shotNotification('danger',"Error al obtener la aerolinea");
-                return {};
-            }
-        }
-        const cleanForm = document.getElementById("airline-form").outerHTML;
-
-        const throw_modal = async (action,airline_id = null) => {
-            $("#airline-form").html(cleanForm);
-            const save_modal = $("#save-modal")
-            save_modal.off('click');
-            if(action === 'create'){
-                $("#exampleModalLabel").text("Crear Aerolinea");
-                save_modal.on('click', () => create() );
-            }else{
-                $("#exampleModalLabel").text("Editar Aerolinea");
-                if (airline_id){
-                    const user = await getAirline(airline_id);
-                    fillForm(user);
-                    save_modal.on('click', () =>  update(airline_id) );
-                }else{
-                    md.shotNotification('danger',"Error al obtener la aerolinea");
-                    save_modal.attr('disabled','disable');
-                }
-            }
-        }
-    </script>
 @endpush
+<script>
+
+    const update = (id) => {
+        const callback =  () =>{
+            window.Airline.putAirline(id,getFormObject('#airline-form')).then((request)=> {
+                if (request){
+                    window.location.reload();
+                }
+            });
+        }
+        setFormValidation('#airline-form',callback)
+    };
+
+    const create = () => {
+        const callback =  () =>{
+            window.Airline.postAirline(getFormObject('#airline-form')).then((request)=> {
+                if (request){
+                    window.location.reload();
+                }
+            });
+        }
+        setFormValidation('#airline-form', callback(), {
+            ful_name: {
+                required: true
+            }
+        })
+    };
+
+    const cleanForm = document.getElementById("airline-form").outerHTML;
+
+    const throw_modal = async (action,airline_id = null) => {
+        $("#airline-form").html(cleanForm);
+        const save_modal = $("#save-modal")
+        save_modal.off('click');
+        if(action === 'create'){
+            $("#exampleModalLabel").text("Crear Aerolinea");
+            save_modal.on('click', () => create() );
+        }else{
+            $("#exampleModalLabel").text("Editar Aerolinea");
+            if (airline_id){
+                const user = await window.Airline.getAirline(airline_id);
+                fillForm(user);
+                save_modal.on('click', () =>  update(airline_id) );
+            }else{
+                md.shotNotification('danger',"Error al obtener la aerolinea");
+                save_modal.attr('disabled','disable');
+            }
+        }
+    }
+</script>

@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -64,9 +65,9 @@ class Handler extends ExceptionHandler
     public function render($request, $exception)
     {
         if ($exception instanceof ValidationException) {
-             $errors = $this->parseMessageBag($exception->validator->errors()->getMessages());
+             $errors = $this->parseMessageBag($exception->validator->errors());
              if ($request->expectsJson()){
-                 return $this->errorResponse("Invalid Data",
+                 return $this->errorResponse("Datos Incorrectos",
                      422,['errors'=>$errors]);
              }
         }

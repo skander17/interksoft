@@ -173,6 +173,66 @@ $(document).ready(function() {
   }, 700);
 });
 
+const locale_rules =  {
+    format: 'YYYY/MM/DD HH:mm',
+    separator: " - ",
+    applyLabel: "Seleccionar",
+    cancelLabel: "Cancelar",
+    fromLabel: "Desde",
+    toLabel: "Hasta",
+    customRangeLabel: "Personalizado",
+    daysOfWeek: [
+        "Lu",
+        "Ma",
+        "Mi",
+        "Ju",
+        "Vi",
+        "Sa",
+        "Do"
+    ],
+    monthNames: [
+        "Enero",
+        "Febrero",
+        "Marzon",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+    ],
+    firstDay: 1
+};
+$(document).ready(function (){
+    $('.datepicker').daterangepicker({
+        singleDatePicker: true,
+        autoUpdateInput: false,
+        applyButtonClasses: "btn-info",
+        locale: locale_rules
+    })
+});
+
+$(document).ready(function (){
+    $('.datetimepicker').daterangepicker({
+        singleDatePicker: true,
+        autoUpdateInput: false,
+        timePicker: true,
+        timePicker24Hour: true,
+        applyButtonClasses: "btn-info",
+        locale: locale_rules
+    })
+});
+
+$('.datepicker').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('DD/MM//YYYY'));
+});
+
+$('.datetimepicker').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('YYYY/MM/DD HH:mm'));
+});
 jQuery.extend(jQuery.validator.messages, {
     required: "Este campo es requerido",
     remote: "Por favor corrije éste campo.",

@@ -14,25 +14,30 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Auth::routes();
 
-Route::middleware('auth')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware'=>'auth:api'],function (){
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::post('login','App\Http\Controllers\AuthController@login');
+
+    Route::resource('users', 'App\Http\Controllers\UserController', ['only' => ['show','store','update','destroy']]);
+
+
+    Route::resource('clients', 'App\Http\Controllers\ClientController', ['only' => ['show','store','update','destroy']]);
+    Route::get('search/clients', 'App\Http\Controllers\ClientController@search');
+
+    Route::resource('airports', 'App\Http\Controllers\AirportController', ['only' => ['show','store','update','destroy']]);
+    Route::get('search/airports', 'App\Http\Controllers\AirportController@search');
+
+    Route::resource('countries', 'App\Http\Controllers\CountryController', ['only' => ['show','store','update','destroy']]);
+
+    Route::resource('airlines', 'App\Http\Controllers\AirlineController', ['only' => ['show','store','update','destroy']]);
+    Route::get('search/airlines', 'App\Http\Controllers\AirlineController@search');
+
+    Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['show','store','update','destroy']]);
+
 });
 
-Route::middleware('auth')->get('/users/{id}','App\Http\Controllers\UserController@show');
-Route::middleware('auth')->put('/users/{id}','App\Http\Controllers\UserController@update');
-Route::middleware('auth')->delete('/users/{id}','App\Http\Controllers\UserController@destroy');
-Route::middleware('auth')->post('/users','App\Http\Controllers\UserController@store');
-
-
-Route::resource('clients', 'App\Http\Controllers\ClientController', ['only' => ['show','store','update','destroy']]);
-
-Route::resource('airports', 'App\Http\Controllers\AirportController', ['only' => ['show','store','update','destroy']]);
-
-Route::resource('countries', 'App\Http\Controllers\CountryController', ['only' => ['show','store','update','destroy']]);
-
-Route::resource('airlines', 'App\Http\Controllers\AirlineController', ['only' => ['show','store','update','destroy']]);
-
-Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['index','show','store','update','destroy']]);
-http://192.168.3.16:8999/api/users

@@ -20,8 +20,8 @@ class CreateTicketsTable extends Migration
             $table->dateTime('date_start')->index();
             $table->dateTime('date_arrival')->index();
             $table->string('aircraft_id')->nullable();
-            $table->foreignId('airport_origin')->index()->unsigned();
-            $table->foreignId('airport_arrival')->index()->unsigned();
+            $table->foreignId('airport_origin_id')->index()->unsigned();
+            $table->foreignId('airport_arrival_id')->index()->unsigned();
             $table->foreignId('client_id')->index()->unsigned();
             $table->foreignId('airline_id')->index()->unsigned();
             $table->foreignId('user_id')->index()->unsigned();
@@ -29,8 +29,8 @@ class CreateTicketsTable extends Migration
             $table->softDeletes();
 
 
-            $table->foreign('airport_origin')->references('id')->on('airports');
-            $table->foreign('airport_arrival')->references('id')->on('airports');
+            $table->foreign('airport_origin_id')->references('id')->on('airports');
+            $table->foreign('airport_arrival_id')->references('id')->on('airports');
             $table->foreign('client_id')->references('id')->on('clients');
             $table->foreign('airline_id')->references('id')->on('airlines');
             $table->foreign('user_id')->references('id')->on('users');

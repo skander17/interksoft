@@ -17,6 +17,7 @@ Auth::routes();
 
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
+Route::get('/auth/jwt', 'App\Http\Controllers\AuthController@getJWT')->middleware('auth');
 
 Route::group(['prefix' => 'report', 'middleware'=>'auth'], function () {
 	Route::get('users','App\Http\Controllers\UserController@report');
@@ -33,9 +34,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::resource('airports', 'App\Http\Controllers\AirportController', ['only' => ['index']]);
 
-
 	Route::resource('countries', 'App\Http\Controllers\CountryController', ['only' => ['index']]);
 
+    Route::resource('tickets', 'App\Http\Controllers\TicketController', ['only' => ['index']]);
 
 
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);

@@ -44,13 +44,13 @@
                         <label for="passport_exp" class="bmd-label-floating">
                             Fecha Vencimiento del Pasaporte(*)
                         </label>
-                        <input class="form-control" name="passport_exp" id="passport_exp" type="date"/>
+                        <input class="form-control datepicker" name="passport_exp" id="passport_exp" type="text"/>
                     </div>
                     <div class="bmd-form-group form-group is-filled">
                         <label for="birth_date" class="bmd-label-floating">
                             Fecha de Nacimiento
                         </label>
-                        <input class="form-control" name="birth_date" id="birth_date" type="date"/>
+                        <input class="form-control datepicker" name="birth_date" id="birth_date" type="text"/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -63,85 +63,26 @@
 </div>
 @push('js')
     <script>
-        const sendCreate = (data) => {
-            let message = 'Error al guardar cliente';
-            window.axios({
-                url: `api/clients`,
-                method: "POST",
-                data: data
-            }).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 201){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const sendUpdate = (id, data) => {
-            let message = 'Error al editar el cliente';
-            window.axios({
-                url: `api/clients/${id}`,
-                method: "PUT",
-                data: data
-            }).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 200){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const fillForm = (object) =>{
-            for (const key in object) {
-                let input = $("#"+key);
-                if (input.length){
-                    input.attr('value',object[key]);
-                    input.closest('.form-group').addClass('is-filled')
-                }
-            }
-        };
-
-
         const update = (id) => {
-            let callback = () => sendUpdate(id,getFormObject('#client-form'));
+            const callback =  () =>{
+                window.clients.putClient(id,getFormObject('#client-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
+                    }
+                });
+            }
             setFormValidation('#client-form',callback)
         };
 
-
-
-        const create = () => setFormValidation('#client-form', () =>{
-            sendCreate(getFormObject('#client-form'));
-        },{
+        const create = () => {
+            const callback =  () =>{
+                window.clients.postClient(getFormObject('#client-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
+                    }
+                });
+            }
+            const rules = {
             full_name:{
                 required: true,
             },
@@ -161,31 +102,21 @@
             birth_date:{
                 required:true
             }
-
-        });
-
-        const getUser = async (id) => {
-
-            try{
-                const request = window.axios({
-                    url: `api/clients/${id}`,
-                    method: "GET"
-                });
-                const response = await request;
-                if (response.data.client !== undefined){
-                    return response.data.client;
-                }
-                return {}
-            }catch (e){
-                console.log(e.message)
-                md.shotNotification('danger',"Error al obtener el cliente");
-                return {};
             }
-        }
+
+            setFormValidation('#client-form', callback, rules )
+        };
+
         const cleanForm = document.getElementById("client-form").outerHTML;
 
-        const throw_modal = async (action,user_id = null) => {
+        const throw_modal = async (action,client_id = null) => {
             $("#client-form").html(cleanForm);
+            $('.datepicker').daterangepicker({
+                singleDatePicker: true,
+                autoUpdateInput: false,
+                applyButtonClasses: "btn-info",
+                locale: locale_rules
+            })
             const save_modal = $("#save-modal")
             save_modal.off('click');
             if(action === 'create'){
@@ -193,10 +124,10 @@
                 save_modal.on('click', () => create() );
             }else{
                 $("#exampleModalLabel").text("Editar Cliente");
-                if (user_id){
-                    const user = await getUser(user_id);
-                    fillForm(user);
-                    save_modal.on('click', () =>  update(user_id) );
+                if (client_id){
+                    const client = await window.clients.getClient(client_id);
+                    fillForm(client);
+                    save_modal.on('click', () =>  update(client_id) );
                 }else{
                     md.shotNotification('danger',"Error al obtener el cliente");
                     save_modal.attr('disabled','disable');

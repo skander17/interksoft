@@ -29,7 +29,7 @@
                         <input class="form-control" name="iso_region" id="iso_region" type="text"/>
                     </div>
                     <div class="bmd-form-group form-group ">
-                        <label for="country" class="bmd-label">
+                        <label for="country_id" class="bmd-label">
                             País (*)
                         </label>
                         <select class="form-control" data-style="btn btn-link" id="country_id" name="country_id">
@@ -50,116 +50,43 @@
 </div>
 @push('js')
     <script>
-        const sendCreate = (data) => {
-            let message = 'Error al guardar aeropuerto';
-            window.axios({
-                url: `api/airports`,
-                method: "POST",
-                data: data
-            }).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 201){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const sendUpdate = (id, data) => {
-            let message = 'Error al editar el aeropuerto';
-            window.axios({
-                url: `api/airports/${id}`,
-                method: "PUT",
-                data: data
-            }).then(async (result) => {
-                if(result.data.message !== undefined){
-                    message = result.data.message;
-                }
-                if (result.status === 200){
-                    md.setAfterReload('success',message)
-                    window.location.reload();
-                }else{
-                    md.shotNotification('danger',message)
-                }
-            }).catch((error) => {
-                md.shotNotification('danger',message)
-
-                if (error.response.data.errors !== undefined){
-                    for (const messages in error.response.data.errors ) {
-                        for (const message of  error.response.data.errors[messages]) {
-                            md.shotNotification('warning',message);
-                        }
-                    }
-                }
-            });
-        }
-
-        const fillForm = (object) =>{
-            for (const key in object) {
-                let input = $("#"+key);
-                if (input.length){
-                    input.attr('value',object[key]);
-                    input.closest('.form-group').addClass('is-filled')
-                }
-            }
-        };
-
 
         const update = (id) => {
-            let callback = () => sendUpdate(id,getFormObject('#airport-form'));
+            const callback =  () =>{
+                window.Airports.putAirport(id,getFormObject('#airport-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
+                    }
+                });
+            }
             setFormValidation('#airport-form',callback)
         };
 
-        const create = () => setFormValidation('#airport-form', () =>{
-            sendCreate(getFormObject('#airport-form'));
-        },{
-            name:{
-                required: true,
-            },
-            iata_code: {
-                required: true
-            },
-            country_id: {
-                required: true
-            }
-
-        });
-
-        const getAirport = async (id) => {
-
-            try{
-                const request = window.axios({
-                    url: `api/airports/${id}`,
-                    method: "GET"
+        const create = () => {
+            const callback =  () =>{
+                window.Airports.postAirport(getFormObject('#airport-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
+                    }
                 });
-                const response = await request;
-                if (response.data.user !== undefined){
-                    return response.data.user;
-                }
-                return {}
-            }catch (e){
-                console.log(e.message)
-                md.shotNotification('danger',"Error al obtener el aeropuerto");
-                return {};
             }
+            const rules = {
+                name:{
+                    required: true,
+                },
+                iata_code: {
+                    required: true
+                },
+                country_id: {
+                    required: true
+                }
+            }
+
+            setFormValidation('#airport-form', callback, rules);
         }
         const cleanForm = document.getElementById("airport-form").outerHTML;
 
-        const throw_modal = async (action,user_id = null) => {
+        const throw_modal = async (action,airport_id = null) => {
             $("#airport-form").html(cleanForm);
             const save_modal = $("#save-modal")
             save_modal.off('click');
@@ -168,10 +95,10 @@
                 save_modal.on('click', () => create() );
             }else{
                 $("#exampleModalLabel").text("Editar Aeropuerto");
-                if (user_id){
-                    const user = await getUser(user_id);
+                if (airport_id){
+                    const user = await window.Airports.getAirport(airport_id);
                     fillForm(user);
-                    save_modal.on('click', () =>  update(user_id) );
+                    save_modal.on('click', () =>  update(airport_id) );
                 }else{
                     md.shotNotification('danger',"Error al obtener el aeropuerto");
                     save_modal.attr('disabled','disable');

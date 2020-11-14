@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\AirportRepository;
 use App\Repositories\CountryRepository;
+use Illuminate\Http\Request;
 
 class AirportController extends Controller
 {
@@ -17,5 +18,10 @@ class AirportController extends Controller
         $airports =   $this->repository->index();
         $countries =  $countryRepository->index();
         return view('airports.index',['airports'=>$airports,'countries'=>$countries]);
+    }
+
+    public function search(Request $request){
+        $result = $this->repository->search($request->input('search'))->toArray();
+        return response()->json($result);
     }
 }

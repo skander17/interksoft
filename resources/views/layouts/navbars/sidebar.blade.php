@@ -31,6 +31,12 @@
                 <span class="sidebar-normal"> Lista de Usuarios </span>
             </a>
         </li>
+        <li class="nav-item{{ $activePage == 'tickets' ? ' active' : '' }}">
+            <a class="nav-link" href="{{ route('tickets.index') }}">
+                <i class="material-icons">receipt</i>
+                <span class="sidebar-normal"> Lista de Boletos </span>
+            </a>
+        </li>
         <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="#airCollapse" aria-expanded="true">
                 <i class="material-icons">list</i>

@@ -3,7 +3,6 @@ namespace App\Services;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Illuminate\Contracts\Container\BindingResolutionException;
 
 class ReportService
 {
@@ -32,7 +31,7 @@ class ReportService
 
     /**
      * @param $html
-     * @return void
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function render($html)
     {
@@ -58,7 +57,7 @@ class ReportService
 
         $canvas->close_object();
         $canvas->add_object($footer, "all");
-        $pdf->stream('report.pdf', array('Attachment' => 0));
+        return response($pdf->output())->header("Content-type","application/pdf");
     }
 
     /**
