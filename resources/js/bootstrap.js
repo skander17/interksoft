@@ -22,6 +22,16 @@ window.typeahead = require('./components/autocomplete.js').default;
 
 window.Auth = require('./pluggins/auth.js').default;
 
+window.Ticket = require('./components/tickets.js').default;
+
+window.clients = require('./components/clients').default;
+
+window.Airline = require('./components/airlines').default;
+
+window.Airports = require('./components/airports').default;
+
+window.Country = require('./components/countries').default;
+
 window.axios = require('./pluggins/axios.js').default;
 
 window.Users = require('./components/users.js').default;

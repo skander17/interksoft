@@ -27,6 +27,7 @@ class AirlineController extends Controller
 
     public function search(Request $request){
         $result = $this->repository->search($request->input('search'));
+        return response()->json($result);
     }
 
 }

@@ -25,6 +25,7 @@ class AirportRepository extends Repository
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function search(?string $input){
+        $input = strtolower($input);
         return $this->model::query()->whereRaw(
             "lower(name) LIKE lower(?)",["%$input%"]
         )->orWhereRaw(

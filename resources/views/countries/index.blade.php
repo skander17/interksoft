@@ -77,38 +77,28 @@
 
         md.resolveStorageMessage();
         md.shotNotification('success','Paises cargados con éxito')
-        $(".delete").on('click',function () {
-            const client_id = $(this).data('id')
-            Swal.fire({
-                title: '¿Estás seguro de borrar el Pais?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar!',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.value) {
-                    let message = 'Error al borrar el Pais';
-                    window.axios({
-                        url: `api/countries/${client_id}`,
-                        method: 'DELETE'
-                    }).then(async (result) => {
-                        if(result.data.message !== undefined){
-                            message = result.data.message;
-                        }
-                        if (result.status === 206){
-                            md.setAfterReload('success',message)
-                            window.location.reload();
-                        }else{
-                            md.shotNotification('danger',message)
-                        }
-                    }).catch((error) => {
-                        console.log(error.message)
-                        md.shotNotification('danger',message)
-                    });
+        $(document).on('click','.delete', async function (){
+            const country_id = $(this).closest('tr').data('id')
+            try{
+                const swal = await Swal.fire({
+                    title: '¿Estás seguro de borrar el país?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Eliminar',
+                    cancelButtonText: 'Cancelar!',
+                    reverseButtons: true
+                });
 
+                if (swal.value) {
+                    const result = await window.Country.deleteCountry(country_id);
+                    if (result){
+                        window.location.reload();
+                    }
                 }
-            })
+            }catch (e){
+                md.shotNotification('danger',"Error al borrar el país")
+            }
+
         });
 
         $(".throw-modal").on('click',function () {

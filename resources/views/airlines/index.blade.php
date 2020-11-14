@@ -79,37 +79,28 @@
 
         md.resolveStorageMessage();
         md.shotNotification('success','Aerolineas cargados con éxito')
-        $(".delete").on('click',function () {
-            const client_id = $(this).data('id')
-            Swal.fire({
-                title: '¿Estás seguro de borrar la Aerolinea?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar!',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.value) {
-                    let message = 'Error al borrar la aerolinea';
-                    window.axios.delete(
-                         `api/airlines/${client_id}`
-                    ).then(async (result) => {
-                        if(result.data.message !== undefined){
-                            message = result.data.message;
-                        }
-                        if (result.status === 206){
-                            md.setAfterReload('success',message)
-                            window.location.reload();
-                        }else{
-                            md.shotNotification('danger',message)
-                        }
-                    }).catch((error) => {
-                        console.log(error.message)
-                        md.shotNotification('danger',message)
-                    });
+        $(document).on('click','.delete', async function (){
+            const airline_id = $(this).closest('tr').data('id')
+            try{
+                const swal = await Swal.fire({
+                    title: '¿Estás seguro de borrar el aeropuerto?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Eliminar',
+                    cancelButtonText: 'Cancelar!',
+                    reverseButtons: true
+                });
 
+                if (swal.value) {
+                    const result = await window.Airline.deleteAirline(airline_id);
+                    if (result){
+                        window.location.reload();
+                    }
                 }
-            })
+            }catch (e){
+                md.shotNotification('danger',"Error al borrar el aeropuerto")
+            }
+
         });
 
         $(".throw-modal").on('click',function () {

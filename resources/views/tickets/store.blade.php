@@ -1,12 +1,12 @@
 <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form class="form" id="ticket-form" novalidate="novalidate">
+            <form id="ticket-form" action="#" class="form" novalidate="novalidate">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="ticketModalLabel"></h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <h3 class="modal-title" id="ticketModalLabel"></h3>
                 </div>
                 <div class="modal-body">
                     @csrf
@@ -39,24 +39,24 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="col-lg-6 form-group bmd-form-group">
-                            <label for="origin_airport" class="bmd-label-floating">
+                            <label for="airport_origin" class="bmd-label-floating">
                                 Aeropuerto Origen
                             </label>
-                            <input class="form-control typeahead" name="origin_airport" id="origin_airport" type="text"/>
-                            <input class="form-control typeahead" name="origin_airport_id" id="origin_airport_id" type="hidden"/>
+                            <input class="form-control typeahead" name="airport_origin" id="airport_origin" type="text"/>
+                            <input class="form-control typeahead" name="airport_origin_id" id="airport_origin_id" type="hidden"/>
                         </div>
                         <div class="col-lg-6 form-group bmd-form-group">
-                            <label for="arrival_airport" class="bmd-label-floating">
+                            <label for="airport_arrival" class="bmd-label-floating">
                                 Aeropuerto Destino
                             </label>
-                            <input class="form-control" name="arrival_airport" id="arrival_airport" type="text"/>
-                            <input class="form-control typeahead" name="arrival_airport_id" id="arrival_airport_id" type="hidden"/>
+                            <input class="form-control" name="airport_arrival" id="airport_arrival" type="text"/>
+                            <input class="form-control typeahead" name="airport_arrival_id" id="airport_arrival_id" type="hidden"/>
                         </div>
                         <div class="col-lg-6 form-group bmd-form-group is-filled">
-                            <label for="date_origin" class="bmd-label-static">
+                            <label for="date_start" class="bmd-label-static">
                                 Fecha-Hora Despegue
                             </label>
-                            <input class="form-control datetimepicker" name="date_origin" id="date_origin" type="text"/>
+                            <input class="form-control datetimepicker" name="date_start" id="date_start" type="text"/>
                         </div>
                         <div class="col-lg-6 form-group bmd-form-group is-filled">
                             <label for="date_arrival" class="bmd-label-static">
@@ -84,94 +84,95 @@
             params: {
                 search: document.getElementById("client")
             },
-            destination: document.getElementById("client_id")
+            destination: document.getElementById("client_id"),
+            keys: ['full_name']
         });
 
         window.typeahead.typeahead({
             element: "#airline",
             uri: "api/search/airlines",
             params: {
-                search: document.getElementById("airline").value
+                search: document.getElementById("airline")
             },
-            destination: document.getElementById("airline_id")
+            destination: document.getElementById("airline_id"),
+            keys: ['name','code']
         });
 
         window.typeahead.typeahead({
-            element: "#origin_airport",
+            element: "#airport_origin",
             uri: "api/search/airports",
             params: {
-                search: document.getElementById("origin_airport").value
+                search: document.getElementById("airport_origin")
             },
-            destination: document.getElementById("origin_airport_id")
+            destination: document.getElementById("airport_origin_id"),
+            keys: ['name','iata_code']
         });
 
         window.typeahead.typeahead({
-            element: "#arrival_airport",
+            element: "#airport_arrival",
             uri: "api/search/airports",
             params: {
-                search: document.getElementById("arrival_airport").value
+                search: document.getElementById("airport_arrival")
             },
-            destination: document.getElementById("arrival_airport_id")
+            destination: document.getElementById("airport_arrival_id"),
+            keys: ['name','iata_code']
         });
-        const cleanForm = document.getElementById("ticket-form").outerHTML;
 
-        let update = async (id,password = false) => {
+
+        let update =  (id) => {
             let rules = {}
-            if (password){
-                rules = {
-                    password: {
-                        required: true,
-                        minlength: 8
-                    },
-                    password_confirmation: {
-                        required: true,
-                        minlength: 8,
-                        equalTo: "#password"
+            const callback =  (id) =>{
+                window.Ticket.putTicket(id,getFormObject('#ticket-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
                     }
-                }
+                });
             }
-            const callback = async () =>{
-                const request = await window.Users.putUser(id,getFormObject('#ticket-form'));
-                if (request){
-                    window.location.reload();
-                }
-            }
-            setFormValidation('#user-form', await callback,rules);
+            setFormValidation('#ticket-form',  callback,rules);
         };
 
-        const create = async () =>{
+        const create = () =>{
             let rules = {
-                email:{
-                    required: true,
-                    email:true
+                client:{
+                    required: true
                 },
-                password: {
-                    required: true,
-                    minlength: 8
+                airline: {
+                    required: true
                 },
-                password_confirmation: {
-                    required: true,
-                    minlength: 8,
-                    equalTo: "#password"
+                ticket: {
+                    required: true
+                },
+                origin_airport: {
+                    required: true
+                },
+                arrival_airport: {
+                    required: true
+                },
+                date_arrival: {
+                    required: true
+                },
+                date_start: {
+                    required: true
                 }
             }
-            const callback = async () =>{
-                const request = await window.Users.postUser(getFormObject('#ticket-form'));
-                if (request){
-                    window.location.reload();
-                }
+            const callback =  () =>{
+                window.Ticket.postTicket(getFormObject('#ticket-form')).then((request)=> {
+                    if (request){
+                        window.location.reload();
+                    }
+                });
             }
 
-            setFormValidation('#user-form', await callback ,rules)
+            setFormValidation('#ticket-form', callback ,rules)
         };
 
         const throw_modal = async (action,ticket_id = null) => {
-            $("#user-form").html(cleanForm);
+            //$("#ticket-form").trigger('reset');
             const save_modal = $("#save-ticket")
             save_modal.off('click');
             if(action === 'create'){
                 $("#ticketModalLabel").text("Crear Boleto");
-                save_modal.on('click', async () => await create() );
+                save_modal.on('click', () =>  create() );
             }else{
                 if (! ticket_id){
                     md.shotNotification('danger',"Error al obtener el boleto. Favor recargue a página");
@@ -182,7 +183,7 @@
                     const ticket = await window.Ticket.getTicket(ticket_id);
                     fillForm(ticket);
                 }
-                save_modal.on('click',async () => await update(ticket_id) );
+                save_modal.on('click', () => update(ticket_id) );
             }
         }
     </script>

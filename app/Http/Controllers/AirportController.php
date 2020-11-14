@@ -21,7 +21,7 @@ class AirportController extends Controller
     }
 
     public function search(Request $request){
-        $result = $this->repository->search($request->input('search'));
+        $result = $this->repository->search($request->input('search'))->toArray();
         return response()->json($result);
     }
 }

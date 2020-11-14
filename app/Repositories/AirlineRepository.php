@@ -19,12 +19,13 @@ class AirlineRepository extends Repository
     }
 
     /**
-     * @param ?string $name
+     * @param ?string $input
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function search(?string $input){
+        $input = strtolower($input);
         return $this->model::query()->whereRaw(
-            "lower(name) LIKE lower(?)",["%$input%"]
+            "lower(ful_name) LIKE lower(?)",["%$input%"]
         )->orWhereRaw(
             "lower(code) LIKE lower(?)",["%$input%"]
         )->get();
