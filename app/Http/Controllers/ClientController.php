@@ -17,6 +17,14 @@ class ClientController extends Controller
         'passport_exp' => ['required'],
     ];
 
+    protected array $messages = [
+            'full_name.required' => "El nombre es requerido",
+            'email.required' => "El email es requerido",
+            'email.unique' => "El email ya se encuentra registrado",
+            'passport.required' => "El pasaporte es requerido",
+            'passport_exp.required' => "La fecha de vencimiento del pasaporte es requerida",
+        ];
+
     protected string $reportTitle = "Reporte de Clientes";
 
     public function __construct(ClientRepository $repository)
