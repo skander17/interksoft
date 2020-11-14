@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function __construct(UserRepository $userRepository) {
         parent::__construct($userRepository);
         $this->middleware('auth:api', ['except' => ['login', 'register','getJWT']]);
-        $this->middleware('auth', ['only' => ['getJWT']]);
+        $this->middleware('auth', ['only' => ['getJWT'],'except'=>'login']);
     }
 
     /**
