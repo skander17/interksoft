@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= $title ?></title>
+    <title>{{$title}}</title>
 </head>
 <style>
     table {
@@ -35,30 +35,35 @@
 <body>
 <div>
     <div style="text-align: center;">
-        <h2><?= $title ?></h2>
+        <h2>{{$title}}</h2>
     </div>
 
 </div>
 <div>
-    <h5>Fecha de emision: <?= $date; ?></h5>
-    <h5>Usuario: <?= $username; ?></h5>
+    <h5>Fecha de emision: {{$date}}</h5>
+    <h5>Usuario: {{$username}}</h5>
     <table>
         <thead>
-        <tr>
-            <?php foreach ($index as $title => $value):?>
-            <th><?php echo $value ?></th>
-            <?php endforeach ?>
-        </tr>
+            @if(count($index) > 0)
+                <th>
+                    @foreach($index as $title => $value)
+                    <th>{{$value}}</th>
+                    @endforeach
+                 </th>
+        @endif
+
         </thead>
         <tbody>
-        <?php foreach ($data as $key):?>
+        @foreach($data as $key)
         <tr>
-            <?php foreach ($index as $title => $value):?>
-            <td><?php echo is_array($key) ? $key[$title] ?? null : $key->$title ?? null?></td>
-            <?php endforeach ?>
+            @if(count($data) > 0)
+                @foreach($index as $title => $value)
+                <td>{{is_array($key) ? ($key[$title] ?? null) : ($key->$title ?? null)}}</td>
+                @endforeach
+            @endif
 
         </tr>
-        <?php endforeach ?>
+        @endforeach
         </tbody>
     </table>
 </div>
