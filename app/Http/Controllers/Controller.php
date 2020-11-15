@@ -10,6 +10,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class Controller extends BaseController
@@ -20,7 +21,7 @@ class Controller extends BaseController
     protected array $updateRules = [];
     protected array $messages = [];
     protected ?Repository $repository;
-    protected string $name = "recurso";
+    protected string $name = "resource";
     protected array $alias = [];
     protected string $reportTitle = '';
 
@@ -51,12 +52,26 @@ class Controller extends BaseController
         $data['error'] = true;
         return response()->json($data,$code)->setStatusCode($code,$message);
     }
+
+    /**
+     * @param int $code
+     * @param array $data
+     * @return JsonResponse|object
+     */
+    public function unauthorized($code = 403, $data = []){
+        $data['message'] = "No posees permisos para realizar ésta acción";
+        $data['error'] = true;
+        return response()->json($data,$code)->setStatusCode($code,"unauthorized");
+    }
     /**
      * @param Request $request
      * @return JsonResponse
      * @throws ValidationException
      */
     public function store(Request $request){
+        if (!$request->user()->can("create " . Str::plural($this->name))){
+            return $this->unauthorized();
+        }
         $this->validate($request,$this->storeRules,$this->messages);
         $data = $request->all();
         $resource = $this->repository->store($data);
@@ -65,9 +80,13 @@ class Controller extends BaseController
 
     /**
      * @param $id
+     * @param Request $request
      * @return JsonResponse
      */
-    public function show($id){
+    public function show($id,Request $request){
+        if (!$request->user()->can("show " . Str::plural($this->name))){
+            return $this->unauthorized();
+        }
         $resource = $this->repository->show($id);
         return $this->jsonResponse('Encontrado',200,[$this->name=>$resource]);
     }
@@ -79,16 +98,23 @@ class Controller extends BaseController
      */
     public function update($id, Request $request)
     {
+        if (!$request->user()->can("edit " . Str::plural($this->name))){
+            return $this->unauthorized();
+        }
         $this->repository->update($id,$request->all());
         return $this->jsonResponse('Registro Editado',200,[$this->name=>$request->all()]);
     }
 
     /**
      * @param $id
+     * @param Request $request
      * @return JsonResponse
      * @throws \Exception
      */
-    public function destroy($id){
+    public function destroy($id,Request $request){
+        if (!$request->user()->can("delete " . Str::plural($this->name))){
+            return $this->unauthorized();
+        }
         $this->repository->destroy($id);
         return $this->jsonResponse('Registro Eliminado',206);
 

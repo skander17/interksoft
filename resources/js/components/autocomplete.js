@@ -64,7 +64,7 @@ export default {
                 const result = document.createElement("li");
                 result.setAttribute("class", "no_result");
                 result.setAttribute("tabindex", "1");
-                result.innerHTML = "Sin resultados";
+                result.innerHTML = config.noResult || "Sin resultados";
                 document.getElementById(list_id).appendChild(result);
             },
             onSelection: feedback => {             // Action script onSelection event | (Optional)

@@ -1,8 +1,6 @@
 <?php
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             StatusSeed::class,
+            RolesSeed::class,
             UsersTableSeeder::class,
             ClientSeed::class,
             CountrySeed::class,

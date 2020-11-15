@@ -120,7 +120,16 @@
 
 
         let update =  (id) => {
-            let rules = {}
+            let rules = {
+                date_arrival: {
+                    required: true,
+                    date:true
+                },
+                date_start: {
+                    required: true,
+                    date:true
+                }
+            }
             const callback =  (id) =>{
                 window.Ticket.putTicket(id,getFormObject('#ticket-form')).then((request)=> {
                     if (request){
@@ -149,10 +158,12 @@
                     required: true
                 },
                 date_arrival: {
-                    required: true
+                    required: true,
+                    date:true
                 },
                 date_start: {
-                    required: true
+                    required: true,
+                    date:true
                 }
             }
             const callback =  () =>{

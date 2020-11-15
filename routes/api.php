@@ -22,6 +22,7 @@ Route::group(['middleware'=>'auth:api'],function (){
         return $request->user();
     });
 
+    Route::resource('roles','App\Http\Controllers\AuthController');
 
     Route::resource('users', 'App\Http\Controllers\UserController', ['only' => ['show','store','update','destroy']]);
 

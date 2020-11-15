@@ -22,6 +22,16 @@
                     </label>
                     <input class="form-control" name="email" id="email" type="email"/>
                 </div>
+                <div class="bmd-form-group form-group is-filled">
+                    <label for="roles" class="bmd-label-floating">
+                        Roles (*)
+                    </label>
+                    <select class="form-control" data-style="btn btn-link" id="roles" name="roles">
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="bmd-form-group form-group">
                     <label for="password" class="bmd-label-floating">
                         Contraseña (*)
@@ -118,6 +128,7 @@
                     $("#exampleModalLabel").text("Editar Contraseña");
                     $('#email').closest(".form-group").remove();
                     $('#name').closest(".form-group").remove();
+                    $('#roles').closest(".form-group").remove();
                     password = true;
                 }else{
                     $("#exampleModalLabel").text("Editar Usuario");

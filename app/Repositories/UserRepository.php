@@ -19,14 +19,19 @@ class UserRepository extends Repository
 
     /**
      * @param array $data
-     * @return Builder|Model
+     * @return Builder|User
      */
     public function store(array $data){
-        return $this->model::query()->create([
+        /** @var User $user */
+        $user =  $this->model::query()->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $user->assignRole($data['roles'] ?? [3]);
+
+        return $user;
     }
 
     /**
@@ -56,9 +61,14 @@ class UserRepository extends Repository
         if (isset($data['password'])){
             $data['password'] = Hash::make($data['password']);
         }
-        return $this->model::query()
+        $user =  $this->model::query()
             ->findOrFail($id)
             ->update($data);
+
+        if (isset($data['roles'])){
+            User::find($id)->syncRoles($data['roles']);
+        }
+        return $user;
     }
 
 }

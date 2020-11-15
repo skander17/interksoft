@@ -16,12 +16,14 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-
-        User::query()->create([
+        /** @var User $user */
+        $user = User::query()->create([
            "name"=>"admin",
            "email"=>"admin@example.com",
            "password"=>Hash::make('password')
         ]);
+
+        $user->assignRole('admin');
 
         //User::factory()->times(100)->create();
     }

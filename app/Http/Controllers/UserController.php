@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Repositories\UserRepository;
 
 class UserController extends Controller
@@ -29,7 +30,9 @@ class UserController extends Controller
 
     public function index(UserRepository $repository)
     {
-        return view('users.index', ['users' => $repository->getModel()->newQuery()->get()]);
+        $roles = Role::all();
+        $users = $repository->getModel()->newQuery()->get();
+        return view('users.index', ['users' => $users,'roles'=>$roles]);
     }
 
 }

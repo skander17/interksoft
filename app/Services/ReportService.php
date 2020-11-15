@@ -77,7 +77,7 @@ class ReportService
 
 
     /**
-     * @param miexed $data
+     * @param $data
      * @return ReportService
      */
     public function setData($data)

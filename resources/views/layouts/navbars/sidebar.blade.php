@@ -12,51 +12,61 @@
   </div>
   <div class="sidebar-wrapper">
     <ul class="nav">
+
       <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('home') }}">
           <i class="material-icons">dashboard</i>
             <p>Estadísticas</p>
         </a>
       </li>
+        @can('list clients')
         <li class="nav-item{{ $activePage == 'clients' ? ' active' : '' }}">
             <a class="nav-link" href="{{ route('clients.index') }}">
                 <i class="material-icons">badge</i>
                 <p>Clientes</p>
             </a>
         </li>
-
-        <li class="nav-item{{ $activePage == 'tickets' ? ' active' : '' }}">
-            <a class="nav-link" href="{{ route('tickets.index') }}">
-                <i class="material-icons">receipt</i>
-                <span class="sidebar-normal"> Lista de Boletos </span>
-            </a>
-        </li>
-        <li class="nav-item{{ $activePage == 'airlines' ? ' active' : '' }}">
-            <a class="nav-link" href="{{ route('airlines.index') }}">
-                <i class="material-icons">airplanemode_active</i>
-                <p>Aerolineas</p>
-            </a>
-        </li>
-        <li class="nav-item{{ $activePage == 'airports' ? ' active' : '' }}">
-            <a class="nav-link" href="{{ route('airports.index') }}">
-                <i class="material-icons">local_airport</i>
-                <p>Aeropuertos</p>
-            </a>
-        </li>
-        <li class="nav-item{{ $activePage == 'countries' ? ' active' : '' }}">
-            <a class="nav-link" href="{{ route('countries.index') }}">
-                <i class="material-icons">flag</i>
-                <p>Paises</p>
-            </a>
-        </li>
-
-        <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-            <a class="nav-link" href="{{ route('users.index') }}">
-                <i class="material-icons">groups</i>
-                <span class="sidebar-normal"> Lista de Usuarios </span>
-            </a>
-        </li>
-
+        @endcan
+        @can('list tickets')
+            <li class="nav-item{{ $activePage == 'tickets' ? ' active' : '' }}">
+                <a class="nav-link" href="{{ route('tickets.index') }}">
+                    <i class="material-icons">receipt</i>
+                    <span class="sidebar-normal"> Lista de Boletos </span>
+                </a>
+            </li>
+        @endcan
+        @can('list airlines')
+            <li class="nav-item{{ $activePage == 'airlines' ? ' active' : '' }}">
+                <a class="nav-link" href="{{ route('airlines.index') }}">
+                    <i class="material-icons">airplanemode_active</i>
+                    <p>Aerolineas</p>
+                </a>
+            </li>
+        @endcan
+        @can('list airports')
+            <li class="nav-item{{ $activePage == 'airports' ? ' active' : '' }}">
+                <a class="nav-link" href="{{ route('airports.index') }}">
+                    <i class="material-icons">local_airport</i>
+                    <p>Aeropuertos</p>
+                </a>
+            </li>
+        @endcan
+        @can('list countries')
+            <li class="nav-item{{ $activePage == 'countries' ? ' active' : '' }}">
+                <a class="nav-link" href="{{ route('countries.index') }}">
+                    <i class="material-icons">flag</i>
+                    <p>Paises</p>
+                </a>
+            </li>
+        @endcan
+        @can('list users')
+            <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
+                <a class="nav-link" href="{{ route('users.index') }}">
+                    <i class="material-icons">groups</i>
+                    <span class="sidebar-normal"> Lista de Usuarios </span>
+                </a>
+            </li>
+        @endcan
         <!--
 
         <li class="nav-item ">

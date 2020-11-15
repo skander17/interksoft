@@ -204,3 +204,6 @@
 .ul-style{
     display:contents ;
 }
+.no_result{
+    list-style: none;
+}

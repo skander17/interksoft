@@ -41,13 +41,13 @@
                         <input class="form-control" name="passport" id="passport" type="text"/>
                     </div>
                     <div class="bmd-form-group form-group is-filled">
-                        <label for="passport_exp" class="bmd-label-floating">
+                        <label for="passport_exp" class="bmd-label">
                             Fecha Vencimiento del Pasaporte(*)
                         </label>
                         <input class="form-control datepicker" name="passport_exp" id="passport_exp" type="text"/>
                     </div>
                     <div class="bmd-form-group form-group is-filled">
-                        <label for="birth_date" class="bmd-label-floating">
+                        <label for="birth_date" class="bmd-label">
                             Fecha de Nacimiento
                         </label>
                         <input class="form-control datepicker" name="birth_date" id="birth_date" type="text"/>
@@ -64,14 +64,22 @@
 @push('js')
     <script>
         const update = (id) => {
-            const callback =  () =>{
+            const rules = {
+                passport_exp:{
+                    date:true
+                },
+                birth_date:{
+                    date:true
+                }
+            }
+                const callback =  () =>{
                 window.clients.putClient(id,getFormObject('#client-form')).then((request)=> {
                     if (request){
                         window.location.reload();
                     }
                 });
             }
-            setFormValidation('#client-form',callback)
+            setFormValidation('#client-form',callback,rules)
         };
 
         const create = () => {
@@ -83,25 +91,27 @@
                 });
             }
             const rules = {
-            full_name:{
-                required: true,
-            },
-            dni: {
-                required: true,
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            passport:{
-                required:true
-            },
-            passport_exp:{
-                required: true
-            },
-            birth_date:{
-                required:true
-            }
+                full_name:{
+                    required: true,
+                },
+                dni: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+                passport:{
+                    required:true
+                },
+                passport_exp:{
+                    date:true,
+                    required: true
+                },
+                birth_date:{
+                    date:true,
+                    required:true
+                }
             }
 
             setFormValidation('#client-form', callback, rules )
@@ -117,6 +127,9 @@
                 applyButtonClasses: "btn-info",
                 locale: locale_rules
             })
+            $('.datepicker').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY/MM/DD'));
+            });
             const save_modal = $("#save-modal")
             save_modal.off('click');
             if(action === 'create'){

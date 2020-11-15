@@ -227,7 +227,7 @@ $(document).ready(function (){
 });
 
 $('.datepicker').on('apply.daterangepicker', function(ev, picker) {
-    $(this).val(picker.startDate.format('DD/MM//YYYY'));
+    $(this).val(picker.startDate.format('YYYY/MM/DD'));
 });
 
 $('.datetimepicker').on('apply.daterangepicker', function(ev, picker) {

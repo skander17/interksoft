@@ -24,6 +24,7 @@
                                     <tr>
                                         <th>Nombre</th>
                                         <th>Email</th>
+                                        <th>Rol</th>
                                         <th>Fecha de Creación</th>
                                         <th>Acciones</th>
                                     </tr></thead>
@@ -35,6 +36,9 @@
                                         </td>
                                         <td>
                                             {{ $user->email }}
+                                        </td>
+                                        <td>
+                                            {{ $user->roles[0]->name}}
                                         </td>
                                         <td>
                                             {{ $user->created_at }}
