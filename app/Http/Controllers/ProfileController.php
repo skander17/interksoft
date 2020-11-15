@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\PasswordRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
@@ -21,10 +22,11 @@ class ProfileController extends Controller
     /**
      * Update the profile
      *
-     * @param  \App\Http\Requests\ProfileRequest  $request
+     * @param null $id
+     * @param Request|null $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProfileRequest $request)
+    public function update($id = null ,Request $request = null)
     {
         auth()->user()->update($request->all());
 

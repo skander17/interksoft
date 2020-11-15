@@ -8,17 +8,13 @@
           <div class="card card-stats">
             <div class="card-header card-header-warning card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">content_copy</i>
+                  <i class="fa fa-users"></i>
               </div>
-              <p class="card-category">Used Space</p>
-              <h3 class="card-title">49/50
-                <small>GB</small>
-              </h3>
+              <p class="card-category">Total Clientes</p>
+              <h3 class="card-title">{{$total_clients ?? 0}}</h3>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons text-danger">warning</i>
-                <a href="#pablo">Get More Space...</a>
               </div>
             </div>
           </div>
@@ -27,14 +23,13 @@
           <div class="card card-stats">
             <div class="card-header card-header-success card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">store</i>
+                <i class="material-icons">receipt</i>
               </div>
-              <p class="card-category">Revenue</p>
-              <h3 class="card-title">$34,245</h3>
+              <p class="card-category">Total Boletos vendidos</p>
+              <h3 class="card-title">{{$tickets ?? 0}}</h3>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">date_range</i> Last 24 Hours
               </div>
             </div>
           </div>
@@ -43,14 +38,13 @@
           <div class="card card-stats">
             <div class="card-header card-header-danger card-header-icon">
               <div class="card-icon">
-                <i class="material-icons">info_outline</i>
+                <i class="material-icons">airplanemode_active</i>
               </div>
-              <p class="card-category">Fixed Issues</p>
-              <h3 class="card-title">75</h3>
+              <p class="card-category">Destino más frecuente</p>
+              <h3 class="card-title">{{$airport ?? ''}}</h3>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">local_offer</i> Tracked from Github
               </div>
             </div>
           </div>
@@ -59,19 +53,19 @@
           <div class="card card-stats">
             <div class="card-header card-header-info card-header-icon">
               <div class="card-icon">
-                <i class="fa fa-twitter"></i>
+                <i class="fa fa-user"></i>
               </div>
-              <p class="card-category">Followers</p>
-              <h3 class="card-title">+245</h3>
+              <p class="card-category">Cliente más frecuente</p>
+              <h3 class="card-title">{{$client ?? ''}}</h3>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">update</i> Just Updated
               </div>
             </div>
           </div>
         </div>
       </div>
+        <!--
       <div class="row">
         <div class="col-md-4">
           <div class="card card-chart">
@@ -413,7 +407,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 @endsection
