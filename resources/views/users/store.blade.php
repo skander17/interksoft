@@ -135,8 +135,10 @@
                     $('#password').closest(".form-group").remove();
                     $('#password_confirmation').closest(".form-group").remove();
                     const user = await window.Users.getUser(user_id);
-                    console.log(user);
-                    fillForm(user);
+                    window.Users.fillModel(user);
+                    console.log(window.Users.user)
+                    fillForm(window.Users.user)
+                    $("option[value=" +window.Users.user.roles + "]").attr("selected","selected")
                 }
                 save_modal.on('click', () => update(user_id,password) );
             }

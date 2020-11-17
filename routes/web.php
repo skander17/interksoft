@@ -20,11 +20,13 @@ Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home')->midd
 Route::get('/auth/jwt', 'App\Http\Controllers\AuthController@getJWT')->middleware('auth');
 
 Route::group(['prefix' => 'report', 'middleware'=>'auth'], function () {
+
 	Route::get('users','App\Http\Controllers\UserController@report');
 	Route::get('clients','App\Http\Controllers\ClientController@report');
 	Route::get('airports','App\Http\Controllers\AirportController@report');
 	Route::get('airlines','App\Http\Controllers\AirlineController@report');
 	Route::get('countries','App\Http\Controllers\CountryController@report');
+
 	Route::get('tickets','App\Http\Controllers\TicketController@report');
 
 });

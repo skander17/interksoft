@@ -3,7 +3,15 @@ import api from "../helpers/api";
 export default {
     user: {
         name: '',
-        email: ''
+        email: '',
+        roles: -1
+    },
+    fillModel: function (response){
+        this.user = {
+            name: response.name,
+            email: response.email,
+            roles: response.roles[0].id,
+        }
     },
     getUser: async function(id) {
        const response = await api.get(`/api/users/${id}`);

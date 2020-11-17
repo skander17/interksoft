@@ -65,11 +65,26 @@
     <script>
         const update = (id) => {
             const rules = {
+                full_name:{
+                    required: true,
+                },
+                dni: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true,
+                },
+                passport:{
+                    required:true
+                },
                 passport_exp:{
-                    date:true
+                    date:true,
+                    required: true
                 },
                 birth_date:{
-                    date:true
+                    date:true,
+                    required:true
                 }
             }
                 const callback =  () =>{

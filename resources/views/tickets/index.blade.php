@@ -33,6 +33,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                 @foreach($tickets as $ticket)
                                 <tr data-id = "{{$ticket->id}}">
                                     <td> {{ $ticket->code }} </td>
