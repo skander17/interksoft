@@ -26,11 +26,11 @@ class ProfileController extends Controller
      * @param Request|null $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update($id = null ,Request $request = null)
+    public function update($id = null ,Request $request)
     {
         auth()->user()->update($request->all());
 
-        return back()->withStatus(__('Profile successfully updated.'));
+        return back()->withStatus(__('Perfil editado exitosamente.'));
     }
 
     /**
@@ -43,6 +43,6 @@ class ProfileController extends Controller
     {
         auth()->user()->update(['password' => Hash::make($request->get('password'))]);
 
-        return back()->withStatusPassword(__('Password successfully updated.'));
+        return back()->withStatusPassword(__('Contraseña editada exitosamente.'));
     }
 }

@@ -95,7 +95,7 @@
                 search: document.getElementById("airline")
             },
             destination: document.getElementById("airline_id"),
-            keys: ['name','code']
+            keys: ['ful_name','code']
         });
 
         window.typeahead.typeahead({
@@ -166,7 +166,7 @@
                     date:true
                 }
             }
-            const callback =  () =>{
+            const callback =  () => {
                 window.Ticket.postTicket(getFormObject('#ticket-form')).then((request)=> {
                     if (request){
                         window.location.reload();

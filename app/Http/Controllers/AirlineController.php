@@ -14,6 +14,14 @@ class AirlineController extends Controller
     protected array $messages = [
         'ful_name.required'
     ];
+
+    protected array $alias = [
+        "id" => "ID",
+        "ful_name"=>"Nombre",
+        "description" =>"Descripción" ,
+        "code" =>"Codigo IATA"
+    ];
+    protected string $reportTitle = "Reporte de Aerolineas";
     public function __construct(AirlineRepository $repository)
     {
         $this->name = 'airline';

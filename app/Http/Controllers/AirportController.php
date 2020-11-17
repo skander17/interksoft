@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class AirportController extends Controller
 {
+    protected array $alias = [
+        "id" => "ID",
+        "name"=>"Nombre",
+        "iso_region" =>"Codigo ISO" ,
+        "iata_code" =>"Codigo IATA"
+    ];
+    protected string $reportTitle = "Reporte de Aeropuertos";
     public function __construct(AirportRepository $repository)
     {
         $this->name = 'airport';

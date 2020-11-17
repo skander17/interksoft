@@ -12,19 +12,26 @@ class ClientController extends Controller
 {
     protected array $storeRules = [
         'full_name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:clients'],
-        'passport' => ['required'],
+        'email'     => ['required', 'string', 'email', 'max:255', 'unique:clients'],
+        'passport'  => ['required'],
         'passport_exp' => ['required'],
     ];
 
     protected array $messages = [
             'full_name.required' => "El nombre es requerido",
-            'email.required' => "El email es requerido",
-            'email.unique' => "El email ya se encuentra registrado",
-            'passport.required' => "El pasaporte es requerido",
+            'email.required'     => "El email es requerido",
+            'email.unique'       => "El email ya se encuentra registrado",
+            'passport.required'  => "El pasaporte es requerido",
             'passport_exp.required' => "La fecha de vencimiento del pasaporte es requerida",
         ];
 
+    protected array $alias = [
+        "full_name"=>"Nombres",
+        "dni"      =>"Dni" ,
+        "passport" =>"Pasaporte",
+        "passport_exp" => "Vencimiento del pasaporte",
+        "email"    => "Correo"
+    ];
     protected string $reportTitle = "Reporte de Clientes";
 
     public function __construct(ClientRepository $repository)

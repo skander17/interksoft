@@ -9,7 +9,7 @@
                         <div class="card-header card-header-info row">
                             <h4 class="col-12 card-title ">Paises</h4>
                             <p class="col-8 card-category"> Lista de paises</p>
-                            <a href="{{ url('report/contries')}}" target="_blank"  class="col-4">
+                            <a href="{{ url('report/countries')}}" target="_blank"  class="col-4">
                                 <button class="btn btn-danger btn-fab btn-round btn-md"
                                         data-toggle="tooltip" data-placement="bottom" title="Exportar">
                                     <i class="material-icons">picture_as_pdf</i>

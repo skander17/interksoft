@@ -45,11 +45,11 @@
     <table>
         <thead>
             @if(count($index) > 0)
-                <th>
+                <tr>
                     @foreach($index as $title => $value)
                     <th>{{$value}}</th>
                     @endforeach
-                 </th>
+                </tr>
         @endif
 
         </thead>

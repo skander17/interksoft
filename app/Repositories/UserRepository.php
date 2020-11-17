@@ -39,7 +39,7 @@ class UserRepository extends Repository
      * @return Builder|Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null
      */
     public function show($id){
-        return $this->model::query()->findOrFail($id);
+        return $this->model::query()->with('roles')->findOrFail($id);
     }
 
     /**
