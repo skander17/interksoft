@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
     {
         /** @var User $admin */
         $admin = User::query()->create([
-           "name"=>"Administrador",
+           "name"=>"administrador",
            "email"=>"admin@intercasas.com",
            "password"=>Hash::make('je8t7r9f')
         ]);
@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
 
         /** @var User $operator */
         $operator = User::query()->create([
-            "name"=>"Administrador",
+            "name"=>"operador",
             "email"=>"operador@intercasas.com",
             "password"=>Hash::make('tezfw5h9')
         ]);
@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
 
         /** @var User $user */
         $user = User::query()->create([
-            "name"=>"Administrador",
+            "name"=>"usuario",
             "email"=>"usuario@intercasas.com",
             "password"=>Hash::make('tg7ghpa7')
         ]);
