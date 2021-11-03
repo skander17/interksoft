@@ -2,46 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Airport;
-use App\Models\Client;
+use App\Repositories\AirportRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\TicketRepository;
+use App\Services\TicketService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(TicketRepository $ticketRepository)
     {
         $this->middleware('auth');
+        parent::__construct($ticketRepository);
     }
 
     /**
      * Show the application dashboard.
      *
-     * @param TicketRepository $ticketRepository
+     * @param TicketService $ticketService
      * @param ClientRepository $clientRepository
+     * @param AirportRepository $airportRepository
      * @return Application|Factory|View
      */
-    public function index(TicketRepository $ticketRepository,ClientRepository $clientRepository)
+    public function index(TicketService $ticketService,ClientRepository $clientRepository, AirportRepository $airportRepository)
     {
+        //init Log
+            $this->action = 'List Dashboard';
+        //
         $data['total_clients'] = $clientRepository->getModel()::query()->count('id');
-        $data['tickets'] = $ticketRepository->getModel()::query()->count('id');
-        $data['airport'] = $ticketRepository->getModel()::query()->select('airport_arrival_id',
-            DB::raw('COUNT(airport_arrival_id)'))->groupBy('airport_arrival_id')
-            ->orderByDesc('count')->first();
-        $data['airport'] =  $data['airport'] ? Airport::find($data['airport']->airport_arrival_id)->name : '';
-        $data['client'] = $ticketRepository->getModel()::query()->select('client_id',
-            DB::raw('COUNT(client_id)'))->groupBy('client_id')
-            ->orderByDesc('count')->first();
-        $data['client'] =  $data['client'] ? Client::find($data['client']->client_id)->full_name : '';
+
+        $data['weekly_sales']  = $ticketService->getCountedLatestTickets();
+
+        $data['tickets'] = $ticketService->getRepository()->getTotalOfTickets();
+
+        $most_visited    = $ticketService->getMostVisitedAirport();
+
+        $data['airport'] =  $most_visited ? $airportRepository->getModel()::find($most_visited['airport_arrival_id'])->name : '';
+
+        $most_frequent   = $ticketService->getMostFrequentClient();
+
+        $data['client']  =  $most_frequent ? $clientRepository->getModel()::find($most_frequent['client_id'])->full_name : '';
+
+
+        //return response()->json($data);
         return view('dashboard',$data);
     }
 }

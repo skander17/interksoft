@@ -1,19 +1,18 @@
 version: '3.2'
 
 services:
-  trapeca:
+  interksoft:
     build: .
-    image: trapeca
+    image: interksoft
     ports:
       - '8020:80'
     volumes:
       - .:/var/www/html
     depends_on:
-      - dbtrapeca
-    restart: always
-    container_name: trapeca
+      - db_interksoft
+    container_name: interksoft
 
-  dbtrapeca:
+  db_interksoft:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     environment:
@@ -21,16 +20,15 @@ services:
     ports:
       - '3307:3306'
     restart: always
-    container_name: dbtrapeca
+    container_name: db_interksoft
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
-      PMA_HOST: dbtrapeca
+      PMA_HOST: db_interksoft
       MYSQL_ROOT_PASSWORD: 123456
     ports:
       - '8083:80'
     depends_on:
-      - dbtrapeca
-    restart: always
-    container_name: dbtrapeca_phpmyadmin
+      - db_interksoft
+    container_name: db_interksoft_phpmyadmin

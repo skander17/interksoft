@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Repositories\Repository;
 use App\Services\ReportService;
+use App\Models\LogsModule;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -17,18 +21,38 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected array $storeRules = [];
+    protected array $storeRules  = [];
     protected array $updateRules = [];
-    protected array $messages = [];
-    protected ?Repository $repository;
-    protected string $name = "resource";
-    protected array $alias = [];
-    protected string $reportTitle = '';
+    protected array $messages    = [];
 
-    public function __construct(Repository $repository = null)
+
+    protected ?Repository $repository;
+    protected ?Request $request;
+    private   ?Authenticatable $user;
+
+    protected string $name = "resource";
+    protected array  $alias = [];
+    protected string $reportTitle = '';
+    protected string $action = '';
+
+    private string $time;
+
+    public function __construct(Repository $repository = null, Request $request = null)
     {
         $this->repository = $repository;
+
+        $this->request = $request ?: Request::capture();
+
+        $this->time = microtime(true);
+
+        $this->middleware(function ($request, $next) {
+
+            $this->user = Auth::user();
+
+            return $next($request);
+        });
     }
+
 
     /**
      * @param $message
@@ -74,6 +98,9 @@ class Controller extends BaseController
         }
         $this->validate($request,$this->storeRules,$this->messages);
         $data = $request->all();
+        //init Log
+         $this->action = 'Store ' . $this->name;
+        //
         $resource = $this->repository->store($data);
         return $this->jsonResponse('Recurso creado con éxtio',201,[$this->name=>$resource]);
     }
@@ -87,6 +114,9 @@ class Controller extends BaseController
         if (!$request->user()->can("show " . Str::plural($this->name))){
             return $this->unauthorized();
         }
+        //init Log
+        $this->action = 'Show ' . $this->name;
+        //
         $resource = $this->repository->show($id);
         return $this->jsonResponse('Encontrado',200,[$this->name=>$resource]);
     }
@@ -101,6 +131,9 @@ class Controller extends BaseController
         if (!$request->user()->can("edit " . Str::plural($this->name))){
             return $this->unauthorized();
         }
+        //init Log
+        $this->action = 'Update ' . $this->name;
+        //
         $this->repository->update($id,$request->all());
         return $this->jsonResponse('Registro Editado',200,[$this->name=>$request->all()]);
     }
@@ -115,6 +148,9 @@ class Controller extends BaseController
         if (!$request->user()->can("delete " . Str::plural($this->name))){
             return $this->unauthorized();
         }
+        //init Log
+        $this->action = 'Destroy ' . $this->name;
+        //
         $this->repository->destroy($id);
         return $this->jsonResponse('Registro Eliminado',206);
 
@@ -145,5 +181,30 @@ class Controller extends BaseController
             'code' => $code,
             'message' => $message
         ]);
+    }
+
+
+    public function __destruct()
+    {
+         try {
+
+             if (env('ENABLED_LOG') == 'false'){
+                 return;
+             }
+
+             LogsModule::create([
+                 'module'   => get_called_class(),
+                 'action'   => $this->action,
+                 'path'     => $this->request->getUri(),
+                 'ip'       => $this->request->ip(),
+                 'request'  => json_encode($this->request->all()),
+                 'headers'  => json_encode($this->request->header()),
+                 'username' => $this->user->name,
+                 'useremail'=> $this->user->email,
+                 'role'=> $this->user->roles[0]->name,
+             ]);
+         }catch (\Exception $exception){
+             Log::critical($exception->getMessage());
+         }
     }
 }

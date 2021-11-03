@@ -15,6 +15,9 @@ class CountryController extends Controller
     }
 
     public function index(CountryRepository $countryRepository){
+        /** Init log */
+        $this->action = 'List Country View';
+        /** End Log */
         return view('countries.index',['countries'=>$countryRepository->index()]);
     }
 }

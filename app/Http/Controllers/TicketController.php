@@ -28,21 +28,38 @@ class TicketController extends Controller
         'ticket.unique'               => "El boleto ya se encuentra registrado",
     ];
     protected string $name = 'ticket';
+
     public function __construct(TicketRepository $repository)
     {
         parent::__construct($repository);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index(Request $request){
+        /** Init log */
+            $this->action = 'List Tickets View';
+        /** End Log */
+
         $tickets = $this->repository->index();
+
         return view('tickets.index',["tickets" => $tickets]);
     }
 
     public function store(Request $request)
     {
+        /** Init log */
+            $this->action = 'Store Ticket';
+        /** End Log */
+
         $request->merge(["user_id"=>auth()->user()->id]);
+
         if (!$request->input('code')){
+
             $request->merge(["code"=>$request->input('ticket')]);
+
         }
         return parent::store($request);
     }

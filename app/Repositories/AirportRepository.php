@@ -32,4 +32,5 @@ class AirportRepository extends Repository
             "lower(iata_code) LIKE lower(?)",["%$input%"]
         )->get();
     }
+
 }

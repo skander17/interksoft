@@ -22,12 +22,19 @@ class AirportController extends Controller
     }
 
     public function index(CountryRepository $countryRepository){
+        /** Init log */
+            $this->action = 'List Airports View';
+        /** End Log */
         $airports =   $this->repository->index();
         $countries =  $countryRepository->index();
         return view('airports.index',['airports'=>$airports,'countries'=>$countries]);
     }
 
     public function search(Request $request){
+        /** Init log */
+            $this->action = 'Search Airports';
+        /** End Log */
+
         $result = $this->repository->search($request->input('search'))->toArray();
         return response()->json($result);
     }

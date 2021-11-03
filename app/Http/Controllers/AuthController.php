@@ -94,6 +94,10 @@ class AuthController extends Controller
      * @return JsonResponse
      */
     public function getJWT() {
+        /** Init log */
+            $this->action = 'Create New Token';
+        /** End Log */
+
         $token = \JWTAuth::fromUser(auth()->user());
         return $this->createNewToken($token);
     }

@@ -16,6 +16,9 @@ class ProfileController extends Controller
      */
     public function edit()
     {
+        /** Init log */
+            $this->action = 'List Profile View';
+        /** End Log */
         return view('profile.edit');
     }
 
@@ -28,6 +31,9 @@ class ProfileController extends Controller
      */
     public function update($id = null ,Request $request)
     {
+        /** Init log */
+        $this->action = 'Update User Profile';
+        /** End Log */
         auth()->user()->update($request->all());
 
         return back()->withStatus(__('Perfil editado exitosamente.'));
@@ -41,6 +47,9 @@ class ProfileController extends Controller
      */
     public function password(PasswordRequest $request)
     {
+        /** Init log */
+        $this->action = 'Change User Password ';
+        /** End Log */
         auth()->user()->update(['password' => Hash::make($request->get('password'))]);
 
         return back()->withStatusPassword(__('Contraseña editada exitosamente.'));

@@ -58,5 +58,67 @@ class TicketRepository extends Repository
         }
     }
 
+    /**
+     * @return array
+     */
+    public function countTicketsDaily(): array
+    {
 
+        $weekStartDate = date('Y-m-d H:i', strtotime('-6 days')) ;
+        $weekEndDate   = date('Y-m-d H:i');
+
+        $generatedSeriesQuery = sprintf(
+            "SELECT t.day::date FROM generate_series(timestamp '%s', timestamp '%s', interval '1 day') AS t(day)",
+            $weekStartDate,
+            $weekEndDate
+        );
+
+        return DB::select("SELECT
+            to_char(s.day,'yyyy-mm-dd') AS day , 
+            count(t.id) AS total 
+            
+            FROM ( 
+                $generatedSeriesQuery
+            ) s 
+            LEFT JOIN tickets t ON t.created_at::date = s.day AND deleted_at IS NULL 
+            GROUP BY s.day 
+            ORDER BY s.day ; 
+            ");
+
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getMostVisitedAirports(): array
+    {
+        return $this->model::query()
+            ->select('airport_arrival_id', DB::raw('COUNT(airport_arrival_id)'))
+            ->groupBy('airport_arrival_id')
+            ->orderByDesc('count')
+            ->limit(5)
+            ->get()
+            ->toArray()
+            ;
+    }
+
+    public function getMostFrequentClients(): array
+    {
+        return $this->model::query()
+            ->select('client_id',DB::raw('COUNT(client_id)'))
+            ->groupBy('client_id')
+            ->orderByDesc('count')
+            ->limit(5)
+            ->get()
+            ->toArray();
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalOfTickets(): int
+    {
+        return $this->model::query()->count('id');
+    }
 }

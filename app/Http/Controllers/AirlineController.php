@@ -16,10 +16,10 @@ class AirlineController extends Controller
     ];
 
     protected array $alias = [
-        "id" => "ID",
-        "ful_name"=>"Nombre",
+        "id"        => "ID",
+        "ful_name"  =>"Nombre",
+        "code"      =>"Codigo IATA",
         "description" =>"Descripción" ,
-        "code" =>"Codigo IATA"
     ];
     protected string $reportTitle = "Reporte de Aerolineas";
     public function __construct(AirlineRepository $repository)
@@ -30,10 +30,16 @@ class AirlineController extends Controller
 
     public function index(AirlineRepository $repository)
     {
+        //init Log
+            $this->action = 'List Client View';
+        //
         return view('airlines.index', ['airlines' => $repository->index()]);
     }
 
     public function search(Request $request){
+        //init Log
+        $this->action = 'Search Client';
+        //
         $result = $this->repository->search($request->input('search'));
         return response()->json($result);
     }

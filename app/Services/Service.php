@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Repositories\Repository;
 
-class Service
+abstract class Service
 {
     protected Repository $repository;
 

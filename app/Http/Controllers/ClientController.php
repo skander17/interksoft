@@ -29,8 +29,8 @@ class ClientController extends Controller
         "full_name"=>"Nombres",
         "dni"      =>"Dni" ,
         "passport" =>"Pasaporte",
+        "email"    => "Correo",
         "passport_exp" => "Vencimiento del pasaporte",
-        "email"    => "Correo"
     ];
     protected string $reportTitle = "Reporte de Clientes";
 
@@ -42,16 +42,26 @@ class ClientController extends Controller
 
     public function index(ClientRepository $repository)
     {
+        /** Init log */
+            $this->action = 'List Client View';
+        /** End Log */
         return view('clients.index', ['clients' => $repository->index()]);
     }
 
     public function search(Request $request){
+        /** Init log */
+            $this->action = 'Search Client';
+        /** End Log */
         return response()
             ->json($this->repository->search($request->input('search'))->toArray());
     }
 
     public function store(Request $request)
     {
+        /** Init log */
+            $this->action = 'Save Client';
+        /** End Log */
+
         if (!$request->has('code')){
             $request->merge(['code'=>$request->input('dni')]);
         }
