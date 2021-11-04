@@ -1,0 +1,44 @@
+2021-11-04 04:42:45,506 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2021-11-04 04:42:45,509 INFO supervisord started with pid 1
+2021-11-04 04:42:46,512 INFO spawned: 'nginx' with pid 7
+2021-11-04 04:42:46,514 INFO spawnerr: can't find command 'php-fpm7'
+2021-11-04 04:42:47,515 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-11-04 04:42:47,516 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2021-11-04 04:46:29,630 WARN received SIGQUIT indicating exit request
+2021-11-04 04:46:29,631 INFO waiting for nginx to die
+2021-11-04 04:46:30,698 INFO stopped: nginx (exit status 0)
+2021-11-04 04:46:33,241 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2021-11-04 04:46:33,243 INFO supervisord started with pid 1
+2021-11-04 04:46:34,247 INFO spawned: 'nginx' with pid 8
+2021-11-04 04:46:34,249 INFO spawnerr: can't find command 'php-fpm7'
+2021-11-04 04:46:35,251 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-11-04 04:46:35,251 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2021-11-04 04:47:25,316 WARN received SIGQUIT indicating exit request
+2021-11-04 04:47:25,316 INFO waiting for nginx to die
+2021-11-04 04:47:26,365 INFO stopped: nginx (exit status 0)
+2021-11-04 04:47:33,264 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2021-11-04 04:47:33,267 INFO supervisord started with pid 1
+2021-11-04 04:47:34,272 INFO spawned: 'nginx' with pid 8
+2021-11-04 04:47:34,275 INFO spawnerr: can't find command 'php-fpm7'
+2021-11-04 04:47:35,276 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-11-04 04:47:35,277 INFO gave up: php-fpm entered FATAL state, too many start retries too quickly
+2021-11-04 04:47:40,283 WARN received SIGQUIT indicating exit request
+2021-11-04 04:47:40,284 INFO waiting for nginx to die
+2021-11-04 04:47:41,367 INFO stopped: nginx (exit status 0)
+2021-11-04 04:49:19,428 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2021-11-04 04:49:19,572 INFO supervisord started with pid 1
+2021-11-04 04:49:20,575 INFO spawned: 'nginx' with pid 7
+2021-11-04 04:49:20,580 INFO spawned: 'php-fpm' with pid 8
+2021-11-04 04:49:21,670 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-11-04 04:49:21,670 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-11-04 04:51:54,485 INFO reaped unknown pid 275 (exit status 0)
+2021-11-04 04:52:45,146 WARN received SIGQUIT indicating exit request
+2021-11-04 04:52:45,147 INFO waiting for nginx, php-fpm to die
+2021-11-04 04:52:45,153 INFO stopped: php-fpm (exit status 0)
+2021-11-04 04:52:45,202 INFO stopped: nginx (exit status 0)
+2021-11-04 04:53:42,623 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2021-11-04 04:53:42,628 INFO supervisord started with pid 1
+2021-11-04 04:53:43,632 INFO spawned: 'nginx' with pid 8
+2021-11-04 04:53:43,634 INFO spawned: 'php-fpm' with pid 9
+2021-11-04 04:53:44,729 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-11-04 04:53:44,729 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

@@ -1,34 +1,33 @@
 version: '3.2'
 
 services:
-  interksoft:
-    build: .
-    image: interksoft
+  intercasas-php:
+    container_name: intercasas-php
     ports:
       - '8020:80'
+    build: .
     volumes:
       - .:/var/www/html
     depends_on:
-      - db_interksoft
-    container_name: interksoft
+      - intercasas-db
+    networks:
+      - intercasas-network
 
-  db_interksoft:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
+  intercasas-db:
+    container_name: intercasas-db
+    image: postgres:13-alpine
     ports:
-      - '3307:3306'
-    restart: always
-    container_name: db_interksoft
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+      - 5434:5432
     environment:
-      PMA_HOST: db_interksoft
-      MYSQL_ROOT_PASSWORD: 123456
-    ports:
-      - '8083:80'
-    depends_on:
-      - db_interksoft
-    container_name: db_interksoft_phpmyadmin
+      POSTGRES_DB: interksoft
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+    volumes:
+      - intercasas-db-data:/var/lib/postgresql/data
+    networks:
+      - intercasas-network
+volumes:
+  intercasas-db-data:
+networks:
+  intercasas-network:
+    external: false
