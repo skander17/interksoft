@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 id="interksoft">Interksoft</h1>
+<h2 id="sobre-nosotros">Sobre nosotros</h2>
+<p>Interksoft es un sistema para la gestion interna en agencias de viajes, centralizando la información de ventas de boletos de la misma en un sólo sistema fácil, seguro y confiable para el usuario.cuenta con recursos propios para la gestion de registro de clientes, registor de venta de boletería, gestion de usuarios en sus distintos roles, entre otros servicios.</p>
+<h2 id="caracter-sticas">Características</h2>
+<ul>
+    <li>Gestion para el registro y control de Clientes.</li>
+    <li>Registro de ventas de boletos de avión.</li>
+    <li>Gestion de usuarios y sus distintos roles.</li>
+    <li>Información o estadística de las ventas de boletos y actividad de clientes.</li>
+    <li>Exportación de documentos PDF con la información registrada.</li>
+</ul>
+<h2 id="tecnolog-as-usadas">Tecnologías usadas</h2>
+<p>Interksoft se ejecuta sobre una serie de herramientas de última tecnología para la relización de todas sus tareas.</p>
+<ul>
+    <li><a href="https://laravel.com/">Laravel</a> - Laravel es un marco de aplicación web con una sintaxis elegante y expresiva.</li>
+    <li>PHP - Lenguaje del servidor version &gt;= 8.0</li>
+    <li>Composer   - Gestor de paquetes y librerias de PHP. </li>
+    <li>PostgreSQL - Motor de base de datos recomendado.</li>
+    <li>Bootstrap  - Framework CSS para la interfaz de usuario (UI).</li>
+    <li>jQuery - Librería JS que facilita la manipulación del DOM.</li>
+</ul>
+<p>Para una mejor visualizacion del sistema visitar nuestra apliacion en linea atraves de <a href="https://interksoft.herokuapp.com/">https://interksoft.herokuapp.com/</a> </p>
+<h2 id="instalaci-n">Instalación</h2>
+<h3 id="pre-requisitos-">Pre requisitos.</h3>
+<ul>
+    <li>BCMath PHP Extension</li>
+    <li>Ctype PHP Extension</li>
+    <li>Fileinfo PHP Extension</li>
+    <li>JSON PHP Extension</li>
+    <li>Mbstring PHP Extension</li>
+    <li>OpenSSL PHP Extension</li>
+    <li>PDO PHP Extension</li>
+    <li>PDO_PGSQL PHP Extension</li>
+    <li>PGSQL PHP Extension</li>
+    <li>Tokenizer PHP Extension</li>
+    <li>XML PHP Extension</li>
+</ul>
+<h3 id="instalaci-n-en-maquina-local-">Instalación en maquina local.</h3>
+<p>Para instalar localmente la apliaccion es necesario instalar y habilitar las siguientes librerias.</p>
+<pre><code class="lang-sh"><span class="hljs-selector-tag">cd</span> <span class="hljs-selector-tag">interksoft</span>
+<span class="hljs-selector-tag">cp</span> <span class="hljs-selector-class">.env</span><span class="hljs-selector-class">.example</span> <span class="hljs-selector-class">.env</span>
+<span class="hljs-selector-tag">composer</span> <span class="hljs-selector-tag">install</span>
+<span class="hljs-selector-tag">php</span> <span class="hljs-selector-tag">artisan</span> <span class="hljs-selector-tag">key</span><span class="hljs-selector-pseudo">:generate</span> &amp;&amp; <span class="hljs-selector-tag">php</span> <span class="hljs-selector-tag">artisan</span> <span class="hljs-selector-tag">jwt</span><span class="hljs-selector-pseudo">:private</span>
+<span class="hljs-selector-tag">php</span> <span class="hljs-selector-tag">artisan</span> <span class="hljs-selector-tag">migrate</span> <span class="hljs-selector-tag">--seed</span>
+</code></pre>
+<p>Para ejecutarse sobre el servidor de PHP usar la siguiente linea</p>
+<pre><code class="lang-sh"><span class="hljs-attribute">php artisan serve</span>
+</code></pre>
+<p>Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url <a href="http://localhost:8000">http://localhost:8000</a></p>
+<h3 id="instalaci-n-mediante-docker">Instalación mediante Docker</h3>
+<p>Interksoft cuenta con un entorno de desarrollo compatible con Docker y Docker Compose.</p>
+<pre><code class="lang-sh">cd interksoft
+cp <span class="hljs-selector-class">.env</span><span class="hljs-selector-class">.example</span> <span class="hljs-selector-class">.env</span>
+docker-compose up -d
+</code></pre>
+<p>Una vez haya terminado la instalación del stack ejecutar los siguientes comandos.</p>
+<pre><code class="lang-sh"><span class="hljs-symbol">docker</span> exec intercasas-php /<span class="hljs-keyword">bin/sh </span>-c <span class="hljs-string">"php artisan key:generate &amp;&amp; php artisan jwt:secret &amp;&amp; php artisan migrate --seed"</span>
+</code></pre>
+<p>Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url <a href="http://localhost:8090">http://localhost:8090</a></p>
+
+</body>
+</html>

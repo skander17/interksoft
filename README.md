@@ -24,29 +24,26 @@ Interksoft se ejecuta sobre una serie de herramientas de última tecnología par
 - jQuery - Librería JS que facilita la manipulación del DOM.
 
 
+Para una mejor visualizacion del sistema visitar nuestra apliacion en linea atraves de [https://interksoft.herokuapp.com/](https://interksoft.herokuapp.com/) 
+
 ## Instalación
 
+### Pre requisitos.
 
-### Instalación mediante Docker
-
-Interksoft cuenta con un entorno de desarrollo compatible con Docker.
-
-```sh
-cd interksoft
-cp .env.example .env
-docker-compose up -d 
-```
-Una vez haya terminado la instalación del stack ejecutar los siguientes comandos.
-
-
-```sh
-docker exec intercasas-php /bin/sh -c "php artisan key:generate && php artisan jwt:secret && php artisan migrate --seed"
-```
-
-Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url [http://localhost:8090](http://localhost:8090)
+- BCMath PHP Extension
+- Ctype PHP Extension
+- Fileinfo PHP Extension
+- JSON PHP Extension
+- Mbstring PHP Extension
+- OpenSSL PHP Extension
+- PDO PHP Extension
+- PDO_PGSQL PHP Extension
+- PGSQL PHP Extension
+- Tokenizer PHP Extension
+- XML PHP Extension
 
 ### Instalación en maquina local.
-
+Para instalar localmente la apliaccion es necesario instalar y habilitar las siguientes librerias.
 ```sh
 cd interksoft
 cp .env.example .env
@@ -62,6 +59,25 @@ php artisan serve
 ```
 
 Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url [http://localhost:8000](http://localhost:8000)
+
+### Instalación mediante Docker
+
+Interksoft cuenta con un entorno de desarrollo compatible con Docker y Docker Compose.
+
+```sh
+cd interksoft
+cp .env.example .env
+docker-compose up -d 
+```
+Una vez haya terminado la instalación del stack ejecutar los siguientes comandos.
+
+
+```sh
+docker exec intercasas-php /bin/sh -c "php artisan key:generate && php artisan jwt:secret && php artisan migrate --seed"
+```
+
+Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url [http://localhost:8090](http://localhost:8090)
+
 <!---
 
 ## Docker
