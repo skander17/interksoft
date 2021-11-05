@@ -13,6 +13,7 @@ class ClientController extends Controller
     protected array $storeRules = [
         'full_name' => ['required', 'string', 'max:255'],
         'email'     => ['required', 'string', 'email', 'max:255', 'unique:clients'],
+        'dni'       => ['required', 'unique:clients'],
         'passport'  => ['required'],
         'passport_exp' => ['required'],
     ];
@@ -21,6 +22,7 @@ class ClientController extends Controller
             'full_name.required' => "El nombre es requerido",
             'email.required'     => "El email es requerido",
             'email.unique'       => "El email ya se encuentra registrado",
+            'dni.unique'         => "El DNI ya se encuentra registrado",
             'passport.required'  => "El pasaporte es requerido",
             'passport_exp.required' => "La fecha de vencimiento del pasaporte es requerida",
         ];

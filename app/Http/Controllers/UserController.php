@@ -20,7 +20,11 @@ class UserController extends Controller
     protected array $messages = [
         "email.unique"  =>    "El correo electronico ya se encuentra registrados"
     ];
-
+    protected array $alias = [
+        "name"       =>"Nombres",
+        "email"      => "Correo",
+        "created_at" => "Fecha de Creacion",
+    ];
     protected string $name = "user";
 
     protected string $reportTitle = "Reporte de Usuarios";
