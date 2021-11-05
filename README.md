@@ -1,61 +1,117 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Interksoft
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+## Sobre nosotros
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Interksoft es un sistema para la gestion interna en agencias de viajes, centralizando la información de ventas de boletos de la misma en un sólo sistema fácil, seguro y confiable para el usuario.cuenta con recursos propios para la gestion de registro de clientes, registor de venta de boletería, gestion de usuarios en sus distintos roles, entre otros servicios.
+## Características
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Gestion para el registro y control de Clientes.
+- Registro de ventas de boletos de avión.
+- Gestion de usuarios y sus distintos roles.
+- Información o estadística de las ventas de boletos y actividad de clientes.
+- Exportación de documentos PDF con la información registrada.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tecnologías usadas
 
-## Learning Laravel
+Interksoft se ejecuta sobre una serie de herramientas de última tecnología para la relización de todas sus tareas.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- [Laravel](https://laravel.com/) - Laravel es un marco de aplicación web con una sintaxis elegante y expresiva.
+- PHP - Lenguaje del servidor version >= 8.0
+- Composer   - Gestor de paquetes y librerias de PHP. 
+- PostgreSQL - Motor de base de datos recomendado.
+- Bootstrap  - Framework CSS para la interfaz de usuario (UI).
+- jQuery - Librería JS que facilita la manipulación del DOM.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+Para una mejor visualizacion del sistema visitar nuestra apliacion en linea atraves de [https://interksoft.herokuapp.com/](https://interksoft.herokuapp.com/) 
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Instalación
 
-### Premium Partners
+### Pre requisitos.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+- BCMath PHP Extension
+- Ctype PHP Extension
+- Fileinfo PHP Extension
+- JSON PHP Extension
+- Mbstring PHP Extension
+- OpenSSL PHP Extension
+- PDO PHP Extension
+- PDO_PGSQL PHP Extension
+- PGSQL PHP Extension
+- Tokenizer PHP Extension
+- XML PHP Extension
 
-## Contributing
+### Instalación en maquina local.
+Para instalar localmente la apliaccion es necesario instalar y habilitar las siguientes librerias.
+```sh
+cd interksoft
+cp .env.example .env
+composer install 
+php artisan key:generate && php artisan jwt:private
+php artisan migrate --seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Para ejecutarse sobre el servidor de PHP usar la siguiente linea
 
-## Code of Conduct
+```sh
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url [http://localhost:8000](http://localhost:8000)
 
-## Security Vulnerabilities
+### Instalación mediante Docker
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Interksoft cuenta con un entorno de desarrollo compatible con Docker y Docker Compose.
 
-## License
+```sh
+cd interksoft
+cp .env.example .env
+docker-compose up -d 
+```
+Una vez haya terminado la instalación del stack ejecutar los siguientes comandos.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+```sh
+docker exec intercasas-php /bin/sh -c "php artisan key:generate && php artisan jwt:secret && php artisan migrate --seed"
+```
+
+Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url [http://localhost:8090](http://localhost:8090)
+
+<!---
+
+## Docker
+
+Dillinger is very easy to install and deploy in a Docker container.
+
+By default, the Docker will expose port 8080, so change this within the
+Dockerfile if necessary. When ready, simply use the Dockerfile to
+build the image.
+
+```sh
+cd dillinger
+docker build -t <youruser>/dillinger:${package.json.version} .
+```
+
+This will create the dillinger image and pull in the necessary dependencies.
+Be sure to swap out `${package.json.version}` with the actual
+version of Dillinger.
+
+Once done, run the Docker image and map the port to whatever you wish on
+your host. In this example, we simply map port 8000 of the host to
+port 8080 of the Docker (or whatever port was exposed in the Dockerfile):
+
+```sh
+docker run -d -p 8000:8080 --restart=always --cap-add=SYS_ADMIN --name=dillinger <youruser>/dillinger:${package.json.version}
+```
+
+> Note: `--capt-add=SYS-ADMIN` is required for PDF rendering.
+
+Verify the deployment by navigating to your server address in
+your preferred browser.
+
+```sh
+127.0.0.1:8000
+```
+-->
+
