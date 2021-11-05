@@ -2,7 +2,7 @@ FROM php:8-fpm-alpine
 LABEL Description="Lightweight container with Nginx 1.14 & PHP-FPM 8.2 based on Alpine Linux."
 
 # Install packages
-RUN apk --no-cache add php8 php8-pdo php8-fpm php8-pdo_mysql php8-json php8-openssl php8-curl \
+RUN apk --no-cache add php8 php8-pdo php8-fpm php8-pgsql php8-pdo_pgsql php8-json php8-openssl php8-curl \
     php8-zlib php8-xml php8-phar php8-intl php8-dom php8-xmlreader php8-ctype php8-iconv php8-simplexml php8-zip\
     php8-mbstring php8-gd php8-xml php8-xmlwriter php8-tokenizer php8-session nginx supervisor curl
 

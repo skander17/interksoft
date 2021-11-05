@@ -17,14 +17,15 @@ Interksoft es un sistema para la gestion interna en agencias de viajes, centrali
 Interksoft se ejecuta sobre una serie de herramientas de última tecnología para la relización de todas sus tareas.
 
 - [Laravel](https://laravel.com/) - Laravel es un marco de aplicación web con una sintaxis elegante y expresiva.
-- PHP - Lenguaje del servidor .
-- Bootstrap - Framework CSS para la interfaz de usuario (UI).
+- PHP - Lenguaje del servidor version >= 8.0
+- Composer   - Gestor de paquetes y librerias de PHP. 
+- PostgreSQL - Motor de base de datos recomendado.
+- Bootstrap  - Framework CSS para la interfaz de usuario (UI).
 - jQuery - Librería JS que facilita la manipulación del DOM.
 
 
 ## Instalación
 
-Interksoft requiere una versión de PHP >= 8.0
 
 ### Instalación mediante Docker
 
@@ -39,7 +40,7 @@ Una vez haya terminado la instalación del stack ejecutar los siguientes comando
 
 
 ```sh
-docker exec intercasas-php /bin/sh -c "php artisan key:generate && php artisan jwt:private && php artisan migrate --seed"
+docker exec intercasas-php /bin/sh -c "php artisan key:generate && php artisan jwt:secret && php artisan migrate --seed"
 ```
 
 Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url [http://localhost:8090](http://localhost:8090)
@@ -48,6 +49,8 @@ Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url [htt
 
 ```sh
 cd interksoft
+cp .env.example .env
+composer install 
 php artisan key:generate && php artisan jwt:private
 php artisan migrate --seed
 ```
@@ -55,10 +58,10 @@ php artisan migrate --seed
 Para ejecutarse sobre el servidor de PHP usar la siguiente linea
 
 ```sh
-cd interksoft
-php artisan key:generate && php artisan jwt:private
-php artisan migrate --seed
+php artisan serve
 ```
+
+Ya podemos acceder a nuestra sistema desde el navegador accediendo a la url [http://localhost:8000](http://localhost:8000)
 <!---
 
 ## Docker
