@@ -15,8 +15,7 @@ class AddNullablePayMethodsToOperationsTable extends Migration
     public function up()
     {
         Schema::table('operations', function (Blueprint $table) {
-            DB::statement('ALTER TABLE operations ALTER COLUMN pay_method DROP NOT NULL;
-');
+            DB::statement('ALTER TABLE operations ALTER COLUMN pay_method DROP NOT NULL;');
         });
     }
 
