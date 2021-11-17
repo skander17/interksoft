@@ -121,4 +121,16 @@ class TicketRepository extends Repository
     {
         return $this->model::query()->count('id');
     }
+
+    /**
+     * @param int $client_id
+     * @return array
+     */
+    public function getClientTickets(int $client_id): array
+    {
+        return $this->model::query()
+            ->where('client_id','=',$client_id)
+            ->get()
+            ->toArray();
+    }
 }

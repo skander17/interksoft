@@ -11,6 +11,12 @@ use Spatie\Permission\Traits\HasRoles;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @property $client_id
+ * @property $name
+ * @property $email
+ * @property $password
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable, SoftDeletes,HasRoles;
@@ -24,6 +30,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'client_id'
     ];
 
     /**

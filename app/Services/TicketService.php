@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\TicketRepository;
-use Illuminate\Support\Arr;
 
 /** @property TicketRepository $repository */
 class TicketService extends Service
@@ -13,6 +13,25 @@ class TicketService extends Service
     public function __construct(TicketRepository $repository)
     {
         parent::__construct($repository);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCurrentUserTickets(): array
+    {
+        /** @var User $current_user */
+        $current_user = auth()->user();
+        return  $this->getClientTickets($current_user->client_id);
+    }
+
+    /**
+     * @param $client_id
+     * @return array
+     */
+    public function getClientTickets($client_id): array
+    {
+        return  $this->repository->getClientTickets($client_id);
     }
 
     /**

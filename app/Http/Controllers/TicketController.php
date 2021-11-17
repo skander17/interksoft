@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\TicketRepository;
 use App\Services\ReportService;
+use App\Services\TicketService;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -38,7 +39,7 @@ class TicketController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function index(Request $request){
+    public function index(TicketService $ticketService){
         /** Init log */
             $this->action = 'List Tickets View';
         /** End Log */
