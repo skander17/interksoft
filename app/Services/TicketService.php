@@ -75,4 +75,12 @@ class TicketService extends Service
 
         return null;
     }
+
+    /**
+     * @return array
+     */
+    public function getMostVisitedAirports(): array
+    {
+        return $this->repository->getMostVisitedAirports();
+    }
 }

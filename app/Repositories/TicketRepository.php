@@ -73,6 +73,17 @@ class TicketRepository extends Repository
             $weekEndDate
         );
 
+        /**  @lang SQL Consulta de tiempo usando Series de fechas en postgresql
+         *
+         * SELECT to_char(s.day,'yyyy-mm-dd') AS day , count(t.id) AS total
+         * FROM (
+         *       SELECT t.day::date FROM generate_series(timestamp '2021-11-17 21:48', timestamp '2021-11-23 21:48', interval '1 day') AS t(day)
+         * ) s
+         * LEFT JOIN tickets t ON t.created_at::date = s.day AND deleted_at IS NULL
+         * GROUP BY s.day
+         * ORDER BY s.day ;
+         */
+
         return DB::select("SELECT
             to_char(s.day,'yyyy-mm-dd') AS day , 
             count(t.id) AS total 
@@ -98,6 +109,7 @@ class TicketRepository extends Repository
             ->groupBy('airport_arrival_id')
             ->orderByDesc('count')
             ->limit(5)
+            ->with(['airport_arrival.country'])
             ->get()
             ->toArray()
             ;

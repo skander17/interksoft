@@ -21,6 +21,10 @@ class Airport extends Model
         "iata_code"
     ];
 
+    protected $hidden = [
+        'created_at','updated_at','deleted_at'
+    ];
+
     public function country(){
         return $this->hasOne(Country::class,'id','country_id');
     }

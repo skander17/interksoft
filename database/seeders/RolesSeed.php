@@ -89,7 +89,7 @@ class RolesSeed extends Seeder
         ]);
         /** @var Role $user */
         $user = Role::query()->create([
-            "name"=>"user"
+            "name"=>"client"
         ]);
         $user->syncPermissions([
             Permission::query()->where(['name' => 'list tickets'])->first(),

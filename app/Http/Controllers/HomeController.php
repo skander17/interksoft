@@ -41,15 +41,16 @@ class HomeController extends Controller
 
         $data['weekly_sales']  = $ticketService->getCountedLatestTickets();
 
+        $data['destinations']  = $ticketService->getMostVisitedAirports();
+
         $data['tickets'] = $ticketService->getRepository()->getTotalOfTickets();
-
-        $most_visited    = $ticketService->getMostVisitedAirport();
-
-        $data['airport'] =  $most_visited ? $airportRepository->getModel()::find($most_visited['airport_arrival_id'])->name : '';
 
         $most_frequent   = $ticketService->getMostFrequentClient();
 
         $data['client']  =  $most_frequent ? $clientRepository->getModel()::find($most_frequent['client_id'])->full_name : '';
+
+        //$most_visited    = $ticketService->getMostVisitedAirport();
+        //$data['airport'] =  $most_visited ? $airportRepository->getModel()::find($most_visited['airport_arrival_id'])->name : '';
 
 
         //return response()->json($data);
