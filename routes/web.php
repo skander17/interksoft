@@ -29,6 +29,8 @@ Route::group(['prefix' => 'report', 'middleware'=>'auth'], function () {
 
 	Route::get('tickets','App\Http\Controllers\TicketController@report');
 
+	Route::get('visited/airports','App\Http\Controllers\HomeController@mostVisitedAirports');
+
 });
 
 Route::group(['middleware' => 'auth'], function () {

@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Repositories\AirportRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\TicketRepository;
+use App\Services\ReportService;
 use App\Services\TicketService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -55,5 +57,14 @@ class HomeController extends Controller
 
         //return response()->json($data);
         return view('dashboard',$data);
+    }
+
+    public function mostVisitedAirports(Request $request, TicketService $ticketService)
+    {
+        return ReportService::report()
+            ->setData($ticketService->getMostVisitedAirports(true))
+            ->setTitle("Destinos mas frecuentes")
+            ->setUsername($request->user()->name)
+            ->render('destinations');
     }
 }

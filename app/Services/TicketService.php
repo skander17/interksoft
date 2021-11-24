@@ -53,7 +53,7 @@ class TicketService extends Service
      */
     public function getMostVisitedAirport(): ?array
     {
-        $mostVisited = $this->repository->getMostVisitedAirports();
+        $mostVisited = $this->repository->getMostVisitedAirports(false);
 
         if (count($mostVisited)){
             return $mostVisited[0];
@@ -77,10 +77,11 @@ class TicketService extends Service
     }
 
     /**
+     * @param bool $all
      * @return array
      */
-    public function getMostVisitedAirports(): array
+    public function getMostVisitedAirports(bool $all = false): array
     {
-        return $this->repository->getMostVisitedAirports();
+        return $this->repository->getMostVisitedAirports($all);
     }
 }

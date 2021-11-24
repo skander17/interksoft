@@ -3,6 +3,8 @@ namespace App\Services;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReportService
 {
@@ -17,12 +19,12 @@ class ReportService
 
     /**
      * @return ReportService
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public static function report(){
+    public static function report(): ?ReportService
+    {
         if (! self::$report instanceof ReportService){
             self::$report = new self();
-            self::$username = app()->make('request')->user()->name;
+            self::$username = Auth::user()->name;
             self::$currentUrl = env('APP_URL');
             self::$date = date("d-m-Y h:i:s a", ( time() - (4*60*60) ));
         }

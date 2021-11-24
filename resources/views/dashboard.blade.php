@@ -69,9 +69,16 @@
       <div class="row">
         <div class="col-lg-6 col-md-12">
           <div class="card">
-            <div class="card-header card-header-danger">
-              <h4 class="card-title">Destinos mas frecuentes</h4>
+            <div class="card-header card-header-danger row">
+              <h4 class="card-title col-8">Destinos mas frecuentes</h4>
               <!--p class="card-category">New employees on 15th September, 2016</p-->
+
+              <a href="{{ url('report/visited/airports')}}" target="_blank"  class="col-4">
+                <button class="btn btn-warning btn-fab btn-round btn-md"
+                        data-toggle="tooltip" data-placement="bottom" title="Exportar">
+                  <i class="material-icons">picture_as_pdf</i>
+                </button>
+              </a>
             </div>
             <div class="card-body table-responsive">
               <table class="table table-hover">

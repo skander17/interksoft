@@ -100,19 +100,23 @@ class TicketRepository extends Repository
 
 
     /**
+     * @param bool $all
      * @return array
      */
-    public function getMostVisitedAirports(): array
+    public function getMostVisitedAirports(bool $all = false): array
     {
-        return $this->model::query()
+        $query =  $this->model::query()
             ->select('airport_arrival_id', DB::raw('COUNT(airport_arrival_id)'))
             ->groupBy('airport_arrival_id')
             ->orderByDesc('count')
-            ->limit(5)
             ->with(['airport_arrival.country'])
-            ->get()
-            ->toArray()
             ;
+
+        if (!$all){
+            $query = $query->limit(5);
+        }
+
+        return $query->get()->toArray();
     }
 
     public function getMostFrequentClients(): array
