@@ -30,35 +30,35 @@ class Ticket extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function airline(){
-        return $this->belongsTo(Airline::class);
+        return $this->belongsTo(Airline::class)->withoutGlobalScopes();
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function client(){
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class)->withoutGlobalScopes();
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function airport_origin(){
-        return $this->belongsTo(Airport::class,'airport_origin_id');
+        return $this->belongsTo(Airport::class,'airport_origin_id')->withoutGlobalScopes();
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function airport_arrival(){
-        return $this->belongsTo(Airport::class,'airport_arrival_id');
+        return $this->belongsTo(Airport::class,'airport_arrival_id')->withoutGlobalScopes();
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withoutGlobalScopes();
     }
 
 
@@ -66,6 +66,6 @@ class Ticket extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function operation(){
-        return $this->hasOne(Operation::class);
+        return $this->hasOne(Operation::class)->withoutGlobalScopes();
     }
 }

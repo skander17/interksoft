@@ -17,9 +17,11 @@ class TicketRepository extends Repository
 
     public function index()
     {
-        return $this->model::with([
+        return
+            $this->model::with([
             'client','airport_origin','airport_arrival','user','airline','operation'
-        ])->get();
+            ])
+                ->get();
     }
 
     public function show($id)

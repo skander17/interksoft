@@ -6,7 +6,7 @@ use App\Repositories\TicketRepository;
 use App\Services\ReportService;
 use App\Services\TicketService;
 use Illuminate\Http\Request;
-
+/** @property TicketRepository $repository */
 class TicketController extends Controller
 {
     protected array $storeRules = [
@@ -39,7 +39,7 @@ class TicketController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function index(TicketService $ticketService){
+    public function index(){
         /** Init log */
             $this->action = 'List Tickets View';
         /** End Log */
