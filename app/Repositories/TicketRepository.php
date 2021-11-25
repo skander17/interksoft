@@ -19,8 +19,16 @@ class TicketRepository extends Repository
     {
         return
             $this->model::with([
-            'client','airport_origin','airport_arrival','user','airline','operation'
+                'client' => function ($q){
+                    return $q->withoutGlobalScopes();
+                },
+                'airport_origin',
+                'airport_arrival',
+                'user',
+                'airline',
+                'operation'
             ])
+
                 ->get();
     }
 
@@ -77,13 +85,13 @@ class TicketRepository extends Repository
 
         /**  @lang SQL Consulta de tiempo usando Series de fechas en postgresql
          *
-         * SELECT to_char(s.day,'yyyy-mm-dd') AS day , count(t.id) AS total
-         * FROM (
-         *       SELECT t.day::date FROM generate_series(timestamp '2021-11-17 21:48', timestamp '2021-11-23 21:48', interval '1 day') AS t(day)
-         * ) s
-         * LEFT JOIN tickets t ON t.created_at::date = s.day AND deleted_at IS NULL
-         * GROUP BY s.day
-         * ORDER BY s.day ;
+          SELECT to_char(s.day,'yyyy-mm-dd') AS day , count(t.id) AS total
+          FROM (
+                SELECT t.day::date FROM generate_series(timestamp '2021-11-17 21:48', timestamp '2021-11-23 21:48', interval '1 day') AS t(day)
+          ) s
+          LEFT JOIN tickets t ON t.created_at::date = s.day AND deleted_at IS NULL
+          GROUP BY s.day
+          ORDER BY s.day ;
          */
 
         return DB::select("SELECT

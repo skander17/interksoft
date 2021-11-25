@@ -24,4 +24,15 @@ class ClientRepository extends Repository
             "lower(full_name) LIKE lower(?)",["%$input%"]
         )->get();
     }
+
+    /**
+     * @param $client_id
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    public function getPhysicalClient($client_id){
+       return $this->model::query()
+            ->where('id','=',$client_id)
+            ->withoutGlobalScopes()
+            ->first();
+    }
 }
